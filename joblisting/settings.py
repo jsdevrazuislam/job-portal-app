@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'jobs',
     'django_cotton',
     'django_tailwind_cli',
     "lucide",

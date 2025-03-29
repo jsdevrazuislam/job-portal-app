@@ -1,7 +1,6 @@
-{% extends 'base.html' %}
+{% extends 'layout.html' %}
 
-{% block content %}
-{% include "partial/navbar.html" %}
+{% block app_content %}
 <div class="bg-gradient-to-r from-primary/90 to-primary text-white">
     <div class="container mx-auto px-4 py-16 md:py-24">
       <div class="max-w-3xl mx-auto text-center">
@@ -24,4 +23,111 @@
       </div>
     </div>
   </div>
+
+  <div class="container mx-auto px-4 py-12">
+    <div class="bg-white rounded-lg shadow-md p-6 mb-10">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div class="relative md:col-span-2"> 
+          {% lucide 'search' class='absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400' size=20 %}
+          <c-input placeholder="Job title, keywords, or company" class="pl-10" />
+        </div>
+        <c-select>
+          <c-select.trigger>
+            <c-select.value placeholder="Location" />
+          </c-select.trigger>
+          <c-select.content>
+            <c-select.item value="anywhere">Anywhere</c-select.item>
+            <c-select.item value="dhaka">Dhaka</c-select.item>
+            <c-select.item value="chittagong">Chittagong</c-select.item>
+            <c-select.item value="sylhet">Sylhet</c-select.item>
+            <c-select.item value="rajshahi">Rajshahi</c-select.item>
+          </c-select.content>
+        </c-select>
+        <c-button class="w-full">Search Jobs</c-button>
+      </div>
+
+      <div class="mt-4 flex flex-wrap gap-2">
+        <c-badge variant="outline" class="cursor-pointer hover:bg-primary hover:text-primary-foreground">
+          Remote
+        </c-badge>
+        <c-badge variant="outline" class="cursor-pointer hover:bg-primary hover:text-primary-foreground">
+          Full-time
+        </c-badge>
+        <c-badge variant="outline" class="cursor-pointer hover:bg-primary hover:text-primary-foreground">
+          Part-time
+        </c-badge>
+        <c-badge variant="outline" class="cursor-pointer hover:bg-primary hover:text-primary-foreground">
+          Entry Level
+        </c-badge>
+        <c-badge variant="outline" class="cursor-pointer hover:bg-primary hover:text-primary-foreground">
+          Experienced
+        </c-badge>
+      </div>
+    </div>
+
+    <h2 class="text-2xl font-bold mb-6">Featured Jobs</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <c-card class="overflow-hidden hover:shadow-lg transition-shadow">
+          <c-card.content class="p-6">
+            <div class="flex items-start gap-4">
+              <div class="h-16 w-16 rounded-md overflow-hidden bg-gray-100 flex-shrink-0">
+                <img
+                  src={job.logo}
+                  alt={job.company}
+                  class="h-full w-full object-contain p-2"
+                />
+              </div>
+              <div class="flex-1">
+                <h3 class="text-xl font-semibold mb-1">
+                  <a href="" class="hover:text-primary">
+                    title
+                  </a>
+                </h3>
+                <p class="text-gray-600 mb-2">company</p>
+                <div class="flex flex-wrap gap-2 mb-3">
+                  <c-badge variant="default">workMode</c-badge>
+                  <c-badge variant="outline">type</c-badge>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-gray-500">
+                  <div class="flex items-center gap-1">
+                    {% lucide 'map-pin' size=16 %}
+                    <span>location</span>
+                  </div>
+                  <div class="flex items-center gap-1">
+                    {% lucide 'dollar-sign' size=16 %}
+                    <span>salary</span>
+                  </div>
+                  <div class="flex items-center gap-1">
+                    {% lucide 'building' size=16 %}
+                    <span>companySize</span>
+                  </div>
+                  <div class="flex items-center gap-1">
+                    {% lucide 'clock' size=16 %}
+                    <span>postedAt</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </c-card.content>
+          <c-card.footer class="bg-gray-50 px-6 py-3">
+            <div class="w-full flex justify-between items-center">
+              <span class="text-sm text-gray-500">postedAt</span>
+              <a href="">
+                <c-button variant="outline" size="sm">
+                  View Details
+                </c-button>
+              </a>
+            </div>
+          </c-card.footer>
+        </c-card>
+    </div>
+
+    <div class="mt-10 text-center">
+      <a href="/jobs">
+        <c-button size="lg">Browse All Jobs</c-button>
+      </a>
+    </div>
+  </div>
+
+
 {% endblock %}

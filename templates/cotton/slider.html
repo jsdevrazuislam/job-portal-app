@@ -1,0 +1,22 @@
+<div x-data="{
+    min: 0,
+    max: 200000,
+    step: 5000,
+    salaryRange: [0, 150000]
+  }" class="my-6">
+  <div class="flex justify-between text-sm text-gray-600">
+    <span x-text="min"></span>
+    <span x-text="max"></span>
+  </div>
+  <div class="relative w-full h-2 bg-gray-300 rounded">
+    <input type="range" min="0" max="200000" step="5000" x-model="salaryRange[0]" 
+      class="absolute w-full h-2 bg-transparent appearance-none cursor-pointer" 
+      @input="if (salaryRange[0] > salaryRange[1]) salaryRange[0] = salaryRange[1]">
+    <input type="range" min="0" max="200000" step="5000" x-model="salaryRange[1]" 
+      class="absolute w-full h-2 bg-transparent appearance-none cursor-pointer" 
+      @input="if (salaryRange[1] < salaryRange[0]) salaryRange[1] = salaryRange[0]">
+  </div>
+  <div class="mt-2 text-center text-sm">
+    Selected Range: <span x-text="salaryRange[0]"></span> - <span x-text="salaryRange[1]"></span>
+  </div>
+</div>

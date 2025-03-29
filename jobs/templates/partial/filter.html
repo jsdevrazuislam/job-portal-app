@@ -1,0 +1,66 @@
+<div class="space-y-6">
+  <div>
+    <h3 class="font-medium mb-3">Job Type</h3>
+    <div class="space-y-2">
+      <div class="flex items-center space-x-2">
+        <c-checkbox id="full-time" />
+        <c-label for="full-time" class="text-sm"> Full-time </c-label>
+      </div>
+      <div class="flex items-center space-x-2">
+        <c-checkbox id="part-time" />
+        <c-label htmlFor="part-time" class="text-sm"> Part-time </c-label>
+      </div>
+      <div class="flex items-center space-x-2">
+        <c-checkbox id="contract" />
+        <c-label htmlFor="contract" class="text-sm"> Contract </c-label>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <h3 class="font-medium mb-3">Work Mode</h3>
+    <div class="space-y-2">
+      <div class="flex items-center space-x-2">
+        <c-checkbox id="remote" />
+        <c-label for="remote" class="text-sm"> Remote </c-label>
+      </div>
+      <div class="flex items-center space-x-2">
+        <c-checkbox id="hybrid" />
+        <c-label for="hybrid" class="text-sm"> Hybrid </c-label>
+      </div>
+      <div class="flex items-center space-x-2">
+        <c-checkbox id="on-site" />
+        <c-label for="on-site" class="text-sm"> On-site </c-label>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <h3 class="font-medium mb-3">Salary Range</h3>
+    <div class="px-2">
+      <c-slider
+        class="my-6"
+      />
+    </div>
+  </div> 
+
+  <div>
+    <h3 class="font-medium mb-3">Company Size</h3>
+    <div class="space-y-2">
+      <div class="flex items-center space-x-2">
+        <c-checkbox id="small" />
+        <c-label for="small" class="text-sm"> Small (10-50) </c-label>
+      </div>
+      <div class="flex items-center space-x-2">
+        <c-checkbox id="medium" />
+        <c-label for="medium" class="text-sm"> Medium (50-250) </c-label>
+      </div>
+      <div class="flex items-center space-x-2">
+        <c-checkbox id="large" />
+        <c-label for="large" class="text-sm"> Large (250+) </c-label>
+      </div>
+    </div>
+  </div>
+
+  <c-button variant="outline" class="w-full"> Reset Filters </c-button>
+</div>
