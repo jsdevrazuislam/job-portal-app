@@ -1,0 +1,220 @@
+<header
+  class="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"
+>
+  <div class="container m-auto p-4 flex h-16 items-center justify-between">
+    <div class="flex items-center gap-6 md:gap-10">
+      <a href="{% url 'home' %}" class="font-bold text-xl flex items-center">
+        <span class="text-primary">Job</span>Portal
+      </a>
+
+      {% comment %} Desktop {% endcomment %}
+      <div class="hidden md:block">
+        <c-navigation-menu>
+          <c-navigation-menu.list>
+            <c-navigation-menu.item>
+              <a href="/jobs" legacyBehavior passHref>
+                <c-navigation-menu.link>Browse Jobs</c-navigation-menu.link>
+              </a>
+            </c-navigation-menu.item>
+            <c-navigation-menu.item>
+              <c-navigation-menu.trigger index="0"
+                >For Employers</c-navigation-menu.trigger
+              >
+              <c-navigation-menu.content index="0">
+                <ul
+                  class="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]"
+                >
+                  <li>
+                    <c-navigation-menu.link>
+                      <div class="text-sm font-medium leading-none">
+                        Post a Job
+                      </div>
+                      <p
+                        class="line-clamp-2 text-sm leading-snug text-muted-foreground"
+                      >
+                        Reach thousands of job seekers and find the perfect
+                        candidate
+                      </p>
+                    </c-navigation-menu.link>
+                  </li>
+                  <li>
+                    <c-navigation-menu.link>
+                      <div class="text-sm font-medium leading-none">
+                        Pricing
+                      </div>
+                      <p
+                        class="line-clamp-2 text-sm leading-snug text-muted-foreground"
+                      >
+                        Affordable plans for businesses of all sizes
+                      </p>
+                    </c-navigation-menu.link>
+                  </li>
+
+                  <li>
+                    <c-navigation-menu.link>
+                      <div class="text-sm font-medium leading-none">
+                        Resources
+                      </div>
+                      <p
+                        class="line-clamp-2 text-sm leading-snug text-muted-foreground"
+                      >
+                        Hiring guides, templates, and best practices
+                      </p>
+                    </c-navigation-menu.link>
+                  </li>
+
+                  <li>
+                    <c-navigation-menu.link>
+                      <div class="text-sm font-medium leading-none">
+                        Success Stories
+                      </div>
+                      <p
+                        class="line-clamp-2 text-sm leading-snug text-muted-foreground"
+                      >
+                        See how companies found great talent
+                      </p>
+                    </c-navigation-menu.link>
+                  </li>
+                </ul>
+              </c-navigation-menu.content>
+            </c-navigation-menu.item>
+            <c-navigation-menu.item>
+              <c-navigation-menu.trigger index="1"
+                >For Job Seekers</c-navigation-menu.trigger
+              >
+              <c-navigation-menu.content index="1">
+                <ul
+                  class="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]"
+                >
+                  <li>
+                    <c-navigation-menu.link>
+                      <div class="text-sm font-medium leading-none">
+                        Career Advice
+                      </div>
+                      <p
+                        class="line-clamp-2 text-sm leading-snug text-muted-foreground"
+                      >
+                        Tips and guidance for your job search
+                      </p>
+                    </c-navigation-menu.link>
+                  </li>
+
+                  <li>
+                    <c-navigation-menu.link>
+                      <div class="text-sm font-medium leading-none">
+                        Resume Builder
+                      </div>
+                      <p
+                        class="line-clamp-2 text-sm leading-snug text-muted-foreground"
+                      >
+                        Create a standout resume that gets noticed
+                      </p>
+                    </c-navigation-menu.link>
+                  </li>
+                  <li>
+                    <c-navigation-menu.link>
+                      <div class="text-sm font-medium leading-none">
+                        Salary Guide
+                      </div>
+                      <p
+                        class="line-clamp-2 text-sm leading-snug text-muted-foreground"
+                      >
+                        Research salaries for different roles and locations
+                      </p>
+                    </c-navigation-menu.link>
+                  </li>
+                  <li>
+                    <c-navigation-menu.link>
+                      <div class="text-sm font-medium leading-none">
+                        Job Alerts
+                      </div>
+                      <p
+                        class="line-clamp-2 text-sm leading-snug text-muted-foreground"
+                      >
+                        Get notified about new opportunities
+                      </p>
+                    </c-navigation-menu.link>
+                  </li>
+                </ul>
+              </c-navigation-menu.content>
+            </c-navigation-menu.item>
+          </c-navigation-menu.list>
+        </c-navigation-menu>
+      </div>
+    </div>
+
+    {% comment %} Mobile {% endcomment %}
+    <div class="block md:hidden">
+      <c-sheet>
+        <c-sheet.trigger>
+          <c-button variant="ghost" size="icon">
+            {% lucide 'menu' class="h-6 w-6" %}
+            <span class="sr-only">Toggle menu</span>
+          </c-button>
+        </c-sheet.trigger>
+        <c-sheet.content side="right">
+          <div class="flex flex-col gap-4 mt-8">
+            <a href="/jobs">
+              <c-button variant="ghost" class="w-full justify-start">
+                Browse Jobs
+              </c-button>
+            </a>
+            <a href="/post-job">
+              <c-button variant="ghost" class="w-full justify-start">
+                Post a Job
+              </c-button>
+            </a>
+            <a href="/pricing">
+              <c-button variant="ghost" class="w-full justify-start">
+                Pricing
+              </c-button>
+            </a>
+            <a href="/career-advice">
+              <c-button variant="ghost" class="w-full justify-start">
+                Career Advice
+              </c-button>
+            </a>
+
+            <div class="border-t my-4"></div>
+
+            {% if user.is_authenticated %}
+            <a href="/dashboard">
+              <c-button variant="ghost" class="w-full justify-start">
+                Dashboard
+              </c-button>
+            </a>
+            <c-button variant="ghost" class="w-full justify-start">
+              Sign Out
+            </c-button>
+            {% else %}
+            <a href="/auth/login">
+              <c-button variant="ghost" class="w-full justify-start">
+                Sign In
+              </c-button>
+            </a>
+            <a href="/auth/register">
+              <c-button variant="default" class="w-full"> Sign Up </c-button>
+            </a>
+            {% endif %}
+          </div>
+        </c-sheet.content>
+      </c-sheet>
+    </div>
+    <div class="md:flex hidden items-center gap-4">
+      {% if user.is_authenticated %}
+      <a href="/dashboard">
+        <c-button variant="ghost">Dashboard</c-button>
+      </a>
+      <c-button variant="ghost">Sign Out</c-button>
+      {% else %}
+      <a href="/auth/login">
+        <c-button variant="ghost">Sign In</c-button>
+      </a>
+      <a href="/auth/register">
+        <c-button variant="default">Sign Up</c-button>
+      </a>
+      {% endif %}
+    </div>
+  </div>
+</header>
+

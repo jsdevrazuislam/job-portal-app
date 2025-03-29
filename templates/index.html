@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% include "partial/navbar.html" %}
+<div class="bg-gradient-to-r from-primary/90 to-primary text-white">
+    <div class="container mx-auto px-4 py-16 md:py-24">
+      <div class="max-w-3xl mx-auto text-center">
+        <h1 class="text-4xl md:text-5xl font-bold mb-6">Find Your Dream Job Today</h1>
+        <p class="text-lg md:text-xl mb-8 text-white/90">
+          Connect with top employers and discover opportunities that match your skills and career goals.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <a href="/auth/job-seeker">
+            <c-button size="lg" variant="secondary">
+              I'm Looking for a Job
+            </c-button>
+          </a>
+          <a href="/auth/employer">
+            <c-button size="lg" variant="ghost">
+              I'm Hiring
+            </c-button>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
