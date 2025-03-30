@@ -1,0 +1,177 @@
+{% extends 'layout.html' %} {% block app_content %}
+<div
+  class="container mx-auto flex items-center justify-center min-h-[calc(100vh-200px)] px-4 py-12"
+>
+  <c-card class="max-w-md">
+    <c-card.header class="space-y-1">
+      <c-card.title class="text-2xl font-bold"
+        >Create an account</c-card.title
+      >
+      <c-card.description
+        >Enter your details to create your account</c-card.description
+      >
+    </c-card.header>
+    <c-card.content>
+      <c-tabs default_value="job-seeker" class="mb-6">
+        <c-tabs.list class="grid w-full grid-cols-2">
+          <c-tabs.trigger value="job-seeker">Job Seeker</c-tabs.trigger>
+          <c-tabs.trigger value="employer">Employer</c-tabs.trigger>
+        </c-tabs.list>
+        <c-tabs.content value="employer">
+          <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="space-y-4">
+                <div class="grid grid-cols-2 gap-4">
+                    {% for field in form %}
+                        {% if field.name == "first_name" or field.name == "last_name" %}
+                        <div class="space-y-2">
+                            <c-label for="{{ field.id_for_label }}">{{ field.label }}</c-label>
+                            <c-input id="{{ field.id_for_label }}" name="{{ field.name }}" value="{{ field.value|default_if_none:'' }}" type="{{ field.field.widget.input_type }}" required />
+                            {% if field.errors %}
+                                <p class="text-red-500 text-sm mt-1">{{ field.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+        
+                {% for field in form %}
+                {% if  field.name == "role" %}
+                       <c-input type="text" name='role' value='employer' class='hidden' />
+                    {% endif %}
+                    {% if field.name != "first_name" and field.name != "last_name" and field.name != 'role' %}
+                      
+                    <div class="space-y-2">
+                        <c-label for="{{ field.id_for_label }}">{{ field.label }}</c-label>
+                        {% if field.field.widget.input_type == "file" %}
+                            <c-input id="{{ field.id_for_label }}" type="file" name="{{ field.name }}" />
+                        {% else %}
+                            <c-input id="{{ field.id_for_label }}" name="{{ field.name }}" value="{{ field.value|default_if_none:'' }}" type="{{ field.field.widget.input_type }}" required />
+                        {% endif %}
+                        {% if field.errors %}
+                            <p class="text-red-500 text-sm mt-1">{{ field.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                {% endfor %}
+        
+                <div class="flex items-center space-x-2">
+                    <c-checkbox id="terms" required />
+                    <c-label for="terms" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                        I agree to the
+                        <a href="/terms" class="text-primary hover:underline">terms of service</a> and
+                        <a href="/privacy" class="text-primary hover:underline">privacy policy</a>
+                    </c-label>
+                </div>
+        
+                {% if form.non_field_errors %}
+                <div>
+                    {% for error in form.non_field_errors %}
+                        <p class="text-red-500 font-semibold">{{ error }}</p>
+                    {% endfor %}
+                </div>
+                {% endif %}
+        
+                <c-button type="submit" class="w-full">
+                    Create Account
+                </c-button>
+            </div>
+        </form>
+        
+        </c-tabs.content>
+        <c-tabs.content value="job-seeker">
+          <form method='POST' enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="space-y-4">
+              <div class="grid grid-cols-2 gap-4">
+                <div class="space-y-2">
+                  <c-label for="first-name">First Name</c-label>
+                  <c-input id="first-name"  name='first_name' required />
+                  <c-input type="text" name='role' value='job-seeker' class='hidden' />
+                  {% if form.first_name.errors %}
+                    <p class="text-red-500 text-sm mt-1">{{ form.first_name.errors.0 }}</p>
+                  {% endif %}
+                </div>
+                <div class="space-y-2">
+                  <c-label for="last-name">Last Name</c-label>
+                  <c-input id="last-name" name='last_name' required />
+                  {% if form.last_name.errors %}
+                    <p class="text-red-500 text-sm mt-1">{{ form.last_name.errors.0 }}</p>
+                  {% endif %}
+                </div>
+              </div>
+              <div class="space-y-2">
+                <c-label for="email">Email</c-label>
+                <c-input id="email" type="email" name='email' placeholder="m@example.com" required />
+                {% if form.email.errors %}
+                <p class="text-red-500 text-sm mt-1">{{ form.email.errors.0 }}</p>
+                {% endif %}
+              </div>
+              <div class="space-y-2">
+                <c-label for="password">Password</c-label>
+                <c-input id="password" name='password1' type="password" required />
+                {% if form.password1.errors %}
+                <p class="text-red-500 text-sm mt-1">{{ form.password1.errors.0 }}</p>
+                {% endif %}
+              </div>
+              <div class="space-y-2">
+                <c-label for="confirm-password">Confirm Password</c-label>
+                <c-input id="confirm-password" name='password2' type="password" required />
+                {% if form.password2.errors %}
+                <p class="text-red-500 text-sm mt-1">{{ form.password2.errors.0 }}</p>
+                {% endif %}
+              </div>
+              <div class="space-y-2">
+                <c-label for="avatar" class='mb-1 block'>Upload Avatar</c-label>
+                <c-input id="avatar" type="file" name="avatar" required />
+                {% if form.avatar.errors %}
+                <p class="text-red-500 text-sm mt-1">{{ form.avatar.errors.0 }}</p>
+                {% endif %}
+              </div>
+
+              <div class="flex items-center space-x-2">
+                <c-checkbox id="terms" required />
+                <c-label
+                  htmlFor="terms"
+                  class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                >
+                  I agree to the
+                  <a href="/terms" class="text-primary hover:underline">
+                    terms of service
+                  </a>
+                  and
+                  <a href="/privacy" class="text-primary hover:underline">
+                    privacy policy
+                  </a>
+                </c-label>
+              </div>
+              {% if form.errors %}
+              <div>
+                  {% for field in form %}
+                      {% for error in field.errors %}
+                          <p class="text-red-500 font-semibold">{{ error }}</p>
+                      {% endfor %}
+                  {% endfor %}
+                  {% for error in form.non_field_errors %}
+                      <p class="text-red-500 font-semibold">{{ error }}</p>
+                  {% endfor %}
+              </div>
+              {% endif %}
+              <c-button type="submit" class="w-full">
+                Create Account
+              </c-button>
+            </div>
+          </form>
+        </c-tabs.content>
+      </c-tabs>
+
+      <div class="mt-4 text-center text-sm">
+        Already have an account?
+        <a href="{% url 'login' %}" class="text-primary hover:underline">
+          Sign in
+        </a>
+      </div>
+    </c-card.content>
+  </c-card>
+</div>
+{% endblock %}

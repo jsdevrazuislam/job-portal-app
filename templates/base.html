@@ -16,7 +16,13 @@
 
 </head>
 <body>
-    
+  {% if messages %}
+  <div class="fixed z-[1000] top-0 left-0 right-0 mt-16 mx-4 bg-green-500 text-white p-4 rounded-md">
+      {% for message in messages %}
+          <p>{{ message }}</p>
+      {% endfor %}
+  </div>
+  {% endif %}
   {% block content %}{% endblock %}
 </body>
 </html>

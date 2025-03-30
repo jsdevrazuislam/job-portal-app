@@ -1,0 +1,50 @@
+{% extends 'layout.html' %} {% block app_content %}
+<div class="container mx-auto flex items-center justify-center min-h-[calc(100vh-200px)] px-4 py-12">
+    <c-card class="max-w-md">
+      <c-card.header class="space-y-1">
+        <c-card.title class="text-2xl font-bold">Sign in to your account</c-card.title>
+        <c-card.description>Enter your email and password to sign in</c-card.description>
+      </c-card.header>
+      <c-card.content>
+
+        <form method='POST'>
+          {% csrf_token %}
+          <div class="space-y-4">
+            <div class="space-y-2">
+              <c-label for="email">Email</c-label>
+              <c-input id="email" name='email' value="{{ form.email.value|default_if_none:'' }}"  type="email" placeholder="m@example.com" />
+            </div>
+            <div class="space-y-2">
+              <div class="flex items-center justify-between">
+                <c-label for="password">Password</c-label>
+                <a href="/auth/forgot-password" class="text-sm text-primary hover:underline">
+                  Forgot password?
+                </a>
+              </div>
+              <c-input id="password" name='password' type="password" value="{{ form.password.value|default_if_none:'' }}" placeholder='password' />
+            </div>
+            <div class="flex items-center space-x-2">
+              <c-checkbox id="remember" />
+              <c-label
+                for="remember"
+                class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              >
+                Remember me
+              </c-label>
+            </div>
+            <c-button type="submit" class="w-full">
+              Sign In
+            </c-button>
+          </div>
+        </form>
+
+        <div class="mt-4 text-center text-sm">
+          Don't have an account?
+          <a href="{% url 'register' %}" class="text-primary hover:underline">
+            Sign up
+          </a>
+        </div>
+      </c-card.content>
+    </c-card>
+  </div>
+{% endblock %}
