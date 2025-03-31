@@ -12,18 +12,36 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'output.css' %}">
+    <link rel="stylesheet" href="{% static 'input.css' %}">
     <script defer src="{% static 'js/alpine.min.js' %}"></script>
 
 </head>
 <body>
-  {% if messages %}
-  <div class="fixed z-[1000] top-0 left-0 right-0 mt-16 mx-4 bg-green-500 text-white p-4 rounded-md">
-      {% for message in messages %}
-          <p>{{ message }}</p>
-      {% endfor %}
-  </div>
-  {% endif %}
+ <div id="toast-container" class="toast-container"></div>
   {% block content %}{% endblock %}
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        function showToast(message, type = "info") {
+            const toastContainer = document.getElementById("toast-container");
+            const toast = document.createElement("div");
+            toast.className = `toast toast-${type}`;
+            toast.innerHTML = `
+                <span>${message}</span>
+                <button class="close-toast" onclick="this.parentElement.remove()">×</button>
+            `;
+            
+            toastContainer.appendChild(toast);
+    
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+    
+        {% for message in messages %}
+            showToast("{{ message }}", "{{ message.tags }}");
+        {% endfor %}
+    });
+    </script>
 </body>
 </html>
 

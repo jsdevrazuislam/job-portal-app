@@ -203,7 +203,7 @@
       <a href="/dashboard">
         <c-button variant="ghost">Dashboard</c-button>
       </a>
-      <c-button variant="ghost">Sign Out</c-button>
+      <c-button variant="ghost" id='logoutBtn'>Sign Out</c-button>
       {% else %}
       <a href="/auth/login">
         <c-button variant="ghost">Sign In</c-button>
@@ -216,3 +216,22 @@
   </div>
 </header>
 
+<script>
+  document.getElementById("logoutBtn")?.addEventListener("click", function () {
+    fetch("{% url 'logout' %}", {
+        method: "POST",
+        headers: {
+            "X-CSRFToken": "{{ csrf_token }}",
+        },
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.message) {
+            window.location.href = "{% url 'login' %}"; 
+        } else {
+            alert("Logout failed!");
+        }
+    })
+    .catch(error => console.error("Error:", error));
+});
+</script>
