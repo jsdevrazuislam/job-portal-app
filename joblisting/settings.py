@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'authentication',
+    'dashboard',
     'jobs',
     'django_cotton',
     'django_tailwind_cli',
@@ -76,6 +77,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'authentication.context_processors.static_data',
             ],
             "loaders": [(
                 "django.template.loaders.cached.Loader",

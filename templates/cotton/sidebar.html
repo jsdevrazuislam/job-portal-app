@@ -1,0 +1,12 @@
+<div class="px-3 py-4">
+  <div class="space-y-1">
+    {% for item in dashboard_navigation %}
+    <a href="{{ item.href }}"
+        class="flex items-center px-2 py-2 text-sm font-medium rounded-md 
+        {% if request.path == item.href %} bg-primary text-white {% else %} text-gray-700 hover:bg-gray-100 {% endif %}">
+          {% lucide item.icon class="mr-3 h-5 w-5" %}
+          {{ item.name }}
+      </a>
+    {% endfor %}
+  </div>
+</div>

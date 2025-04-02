@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+</head>
+<body style="margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+    <table width="100%" cellpadding="0" cellspacing="0" style="max-width: 600px; margin: 20px auto; background-color: #f7fafc;">
+        <tr>
+            <td style="background-color: #3b82f6; text-align: center;">
+                <p style='color: #000; font-weight: bold; font-size:20px'>
+                    JobPortal
+                </p>
+                <h1 style="color: #ffffff; margin: 15px 0 0 0;">Email Verification</h1>
+            </td>
+        </tr>
+
+        <tr>
+            <td style="padding: 0px 20px;">
+                <p style="font-size: 16px; color: #4a5568; margin: 0 0 20px 0;">
+                    Hello <strong>{{ user.first_name }}</strong>,
+                </p>
+                
+                <p style="font-size: 16px; color: #4a5568; margin: 0 0 20px 0;">
+                    Welcome to JobPortal! Please verify your email address to activate your account.
+                </p>
+
+                <div style="text-align: center;">
+                    <a href="{{ verification_link }}"  style="background-color: #3b82f6; color: #ffffff; padding: 12px 30px">
+                        Verify Email Address
+                    </a>
+                </div>
+
+                <p style="font-size: 14px; color: #718096; margin: 20px 0;">
+                    If the button doesn't work, copy and paste this link in your browser:<br>
+                    <span style="color: #3b82f6; word-break: break-all;">{{ verification_link }}</span>
+                </p>
+            </td>
+        </tr>
+
+        <tr>
+            <td style="padding: 20px; background-color: #edf2f7; text-align: center;">
+                <p style="font-size: 12px; color: #718096; margin: 0;">
+                    This email was sent to {{ user.email }}<br>
+                    © 205 JobPortal. All rights reserved.<br>
+                    <a href="#" style="color: #3b82f6; text-decoration: none;">Unsubscribe</a> | 
+                    <a href="#" style="color: #3b82f6; text-decoration: none;">Privacy Policy</a>
+                </p>
+            </td>
+        </tr>
+    </table>
+
+    <div style="display: none; max-height: 0; overflow: hidden;">
+        Hello {{ user.first_name }}, Please verify your email: {{ verification_link }}
+    </div>
+</body>
+</html>
