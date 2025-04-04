@@ -1,22 +1,56 @@
-<div x-data="{
-    min: 0,
-    max: 200000,
-    step: 5000,
-    salaryRange: [0, 150000]
-  }" class="my-6">
-  <div class="flex justify-between text-sm text-gray-600">
-    <span x-text="min"></span>
-    <span x-text="max"></span>
+<c-vars 
+  name_min="" 
+  name_max="" 
+  min="0" 
+  max="200000" 
+  step="5000" 
+  default_min="50000" 
+  default_max="150000"
+/>
+
+<div 
+  x-data="{
+    salaryMin: Number('{{ default_min }}'),
+    salaryMax: Number('{{ default_max }}'),
+    min: Number('{{ min }}'),
+    max: Number('{{ max }}'),
+    step: Number('{{ step }}'),
+
+    clampValues() {
+      if (this.salaryMin > this.salaryMax) this.salaryMin = this.salaryMax;
+      if (this.salaryMax < this.salaryMin) this.salaryMax = this.salaryMin;
+    }
+  }"
+  x-init="$watch('salaryMin', () => clampValues()); $watch('salaryMax', () => clampValues())"
+  class="my-6 w-full {{ class }}"
+  {{ attrs }}
+>
+  <div class="flex justify-between text-sm text-gray-600 mb-2">
+    <span>Min: <span x-text="salaryMin"></span></span>
+    <span>Max: <span x-text="salaryMax"></span></span>
   </div>
+
   <div class="relative w-full h-2 bg-gray-300 rounded">
-    <input type="range" min="0" max="200000" step="5000" x-model="salaryRange[0]" 
-      class="absolute w-full h-2 bg-transparent appearance-none cursor-pointer" 
-      @input="if (salaryRange[0] > salaryRange[1]) salaryRange[0] = salaryRange[1]">
-    <input type="range" min="0" max="200000" step="5000" x-model="salaryRange[1]" 
-      class="absolute w-full h-2 bg-transparent appearance-none cursor-pointer" 
-      @input="if (salaryRange[1] < salaryRange[0]) salaryRange[1] = salaryRange[0]">
+    <div class="absolute top-0 h-2 bg-blue-500 rounded"
+         :style="`left: ${(salaryMin / max) * 100}%; right: ${(100 - (salaryMax / max) * 100)}%`">
+    </div>
+
+    <input type="range"
+      :min="min"
+      :max="max"
+      :step="step"
+      x-model="salaryMin"
+      class="absolute w-full h-2 bg-transparent appearance-none pointer-events-auto z-30" />
+
+    <input type="range"
+      :min="min"
+      :max="max"
+      :step="step"
+      x-model="salaryMax"
+      class="absolute w-full h-2 bg-transparent appearance-none pointer-events-auto z-20" />
   </div>
-  <div class="mt-2 text-center text-sm">
-    Selected Range: <span x-text="salaryRange[0]"></span> - <span x-text="salaryRange[1]"></span>
-  </div>
+
+  <!-- Hidden inputs for form submission -->
+  <input type="hidden" name="{{ name_min }}" :value="salaryMin">
+  <input type="hidden" name="{{ name_max }}" :value="salaryMax">
 </div>

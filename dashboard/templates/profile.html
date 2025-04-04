@@ -1,3 +1,648 @@
 {% extends 'dashboard_layout.html' %} {% block children %}
-<h1>Profile</h1>
+<div class="flex-1 p-8">
+    <h1 class="text-3xl font-bold mb-6">My Profile</h1>
+
+   
+    {% if request.user.role != 'employer' %}
+    <div class="space-y-6">
+        <c-card>
+          <c-card.header class="relative">
+            <div class="absolute right-6 top-6">
+              <c-button>Edit Profile</c-button>
+            </div>
+            <div class="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+              <div class="h-24 w-24 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
+                {% lucide 'user' class="h-12 w-12 text-gray-400" %}
+              </div>
+              <div>
+                <c-card.title class="text-2xl">Rahim Ahmed</c-card.title>
+                <c-card.description class="text-lg">Senior Frontend Developer</c-card.description>
+                <div class="flex flex-wrap gap-2 mt-2">
+                  <div class="flex items-center text-sm text-gray-500">
+                    {% lucide 'map-pin' size=16 class="mr-1" %}
+                    Dhaka, Bangladesh
+                  </div>
+                  <div class="flex items-center text-sm text-gray-500">
+                    {% lucide 'mail' size=16 class="mr-1" %}
+                    rahim@example.com
+                  </div>
+                  <div class="flex items-center text-sm text-gray-500">
+                    {% lucide 'phone' size=16 class="mr-1" %}
+                    +880 1712 345678
+                  </div>
+                </div>
+              </div>
+            </div>
+          </c-card.header>
+          <c-card.content>
+            <div class="space-y-4">
+              <div>
+                <h3 class="text-lg font-semibold mb-2">About Me</h3>
+                <p class="text-gray-600">
+                  Experienced Frontend Developer with 5+ years of expertise in building responsive web applications.
+                  Proficient in React, TypeScript, and modern JavaScript frameworks. Passionate about creating
+                  intuitive user interfaces and optimizing web performance.
+                </p>
+              </div>
+
+              <div>
+                <h3 class="text-lg font-semibold mb-2">Skills</h3>
+                <div class="flex flex-wrap gap-2 mb-3">
+                  
+                    <c-badge variant="secondary" class="px-3 py-1">
+                      {skill}
+                      <button class="ml-2 text-gray-400 hover:text-gray-600">
+                        {% lucide 'x' size=14 %}
+                      </button>
+                    </c-badge>
+                
+                </div>
+                <div class="flex gap-2">
+                  <c-input
+                    placeholder="Add a skill"
+                  />
+                  <c-button variant="outline" onClick={addSkill}>
+                    {% lucide 'plus' size=16 class="mr-1" %}
+                    Add
+                  </c-button>
+                </div>
+              </div>
+            </div>
+          </c-card.content>
+        </c-card>
+
+        <c-tabs default_value="experience">
+          <c-tabs.list class="grid w-full grid-cols-4">
+            <c-tabs.trigger value="experience">Experience</c-tabs.trigger>
+            <c-tabs.trigger value="education">Education</c-tabs.trigger>
+            <c-tabs.trigger value="resume">Resume</c-tabs.trigger>
+            <c-tabs.trigger value="preferences">Preferences</c-tabs.trigger>
+          </c-tabs.list>
+
+          <c-tabs.content value="experience" class="mt-6">
+            <c-card>
+              <c-card.header>
+                <div class="flex justify-between items-center">
+                  <c-card.title>Work Experience</c-card.title>
+                  <c-button>
+                    {% lucide 'plus' size=16 class="mr-1" %}
+                    Add Experience
+                  </c-button>
+                </div>
+              </c-card.header>
+              <c-card.content class="space-y-6">
+                <div class="border rounded-lg p-4">
+                  <div class="flex justify-between">
+                    <div>
+                      <h3 class="font-semibold text-lg">Senior Frontend Developer</h3>
+                      <p class="text-gray-600">TechCorp BD</p>
+                    </div>
+                    <div class="flex gap-2">
+                      <c-button variant="ghost" size="sm">
+                        Edit
+                      </c-button>
+                      <c-button variant="ghost" size="sm" class="text-red-500">
+                        Delete
+                      </c-button>
+                    </div>
+                  </div>
+                  <div class="flex items-center text-sm text-gray-500 mt-1 mb-3">
+                    {% lucide 'calendar' size=16 class="mr-1" %}
+                    Jan 2021 - Present
+                    <span class="mx-2">•</span>
+                    {% lucide 'map-pin' size=16 class="mr-1" %}
+                    Dhaka, Bangladesh
+                  </div>
+                  <p class="text-gray-600 text-sm">
+                    Led the frontend development team in building and maintaining multiple web applications.
+                    Implemented responsive designs, optimized performance, and mentored junior developers.
+                  </p>
+                </div>
+
+                <div class="border rounded-lg p-4">
+                  <div class="flex justify-between">
+                    <div>
+                      <h3 class="font-semibold text-lg">Frontend Developer</h3>
+                      <p class="text-gray-600">WebSolutions Ltd</p>
+                    </div>
+                    <div class="flex gap-2">
+                      <Button variant="ghost" size="sm">
+                        Edit
+                      </Button>
+                      <Button variant="ghost" size="sm" class="text-red-500">
+                        Delete
+                      </Button>
+                    </div>
+                  </div>
+                  <div class="flex items-center text-sm text-gray-500 mt-1 mb-3">
+                    {% lucide 'calendar' size=16 class="mr-1" %}
+                    Mar 2018 - Dec 2020
+                    <span class="mx-2">•</span>
+                    {% lucide 'map-pin' size=16 class="mr-1" %}
+                    Chittagong, Bangladesh
+                  </div>
+                  <p class="text-gray-600 text-sm">
+                    Developed and maintained client websites using React, JavaScript, and CSS. Collaborated with
+                    designers to implement responsive UI components.
+                  </p>
+                </div>
+              </c-card.content>
+            </c-card>
+          </c-tabs.content>
+
+          <c-tabs.content value="education" class="mt-6">
+            <c-card>
+              <c-card.header>
+                <div class="flex justify-between items-center">
+                  <c-card.title>Education</c-card.title>
+                  <c-button>
+                    {% lucide 'plus' size=16 class="mr-1" %}
+                    Add Education
+                  </c-button>
+                </div>
+              </c-card.header>
+              <c-card.content class="space-y-6">
+                <div class="border rounded-lg p-4">
+                  <div class="flex justify-between">
+                    <div>
+                      <h3 class="font-semibold text-lg">BSc in Computer Science</h3>
+                      <p class="text-gray-600">University of Dhaka</p>
+                    </div>
+                    <div class="flex gap-2">
+                      <c-button variant="ghost" size="sm">
+                        Edit
+                      </c-button>
+                      <c-button variant="ghost" size="sm" class="text-red-500">
+                        Delete
+                      </c-button>
+                    </div>
+                  </div>
+                  <div class="flex items-center text-sm text-gray-500 mt-1 mb-3">
+                    {% lucide 'calendar' size=16 class="mr-1" %}
+                    2014 - 2018
+                    <span class="mx-2">•</span>
+                    {% lucide 'graduation-cap' size=16 class="mr-1" %}
+                    CGPA: 3.8/4.0
+                  </div>
+                  <p class="text-gray-600 text-sm">
+                    Specialized in Software Engineering with a focus on web technologies. Participated in
+                    programming competitions and web development projects.
+                  </p>
+                </div>
+              </c-card.content>
+            </c-card>
+          </c-tabs.content>
+
+          <c-tabs.content value="resume" class="mt-6">
+            <c-card>
+              <c-card.header>
+                <div class="flex justify-between items-center">
+                  <c-card.title>Resume</c-card.title>
+                  <Button>Upload New Resume</Button>
+                </div>
+              </c-card.header>
+              <c-card.content>
+                <div class="border rounded-lg p-6 flex flex-col items-center justify-center">
+                  <div class="h-16 w-16 rounded-full bg-blue-100 flex items-center justify-center mb-4">
+                    {% lucide 'file-text' size=16 class="h-8 w-8 text-blue-600" %}
+                  </div>
+                  <h3 class="font-semibold text-lg mb-1">Rahim_Ahmed_Resume.pdf</h3>
+                  <p class="text-gray-500 text-sm mb-4">Uploaded on March 15, 2025</p>
+                  <div class="flex gap-3">
+                    <c-button variant="outline">Download</c-button>
+                    <c-button variant="outline" class="text-red-500">
+                      Delete
+                    </c-button>
+                  </div>
+                </div>
+              </c-card.content>
+            </c-card>
+          </c-tabs.content>
+
+          <c-tabs.content value="preferences" class="mt-6">
+            <c-card>
+              <c-card.header>
+                <c-card.title>Job Preferences</c-card.title>
+                <c-card.description>
+                  Set your preferences to help us find the right job matches for you
+                </c-card.description>
+              </c-card.header>
+              <c-card.content class="space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div class="space-y-2">
+                    <c-label for="job-title">Desired Job Title</c-label>
+                    <c-input id="job-title" value="Senior Frontend Developer" />
+                  </div>
+
+                  <div class="space-y-2">
+                    <c-label for="job-type">Job Type</c-label>
+                    <c-select default_value="full-time">
+                      <c-select.trigger id="job-type">
+                        <c-select.value placeholder="Select job type" />
+                      </c-select.trigger>
+                      <c-select.content>
+                        <c-select.item value="full-time">Full-time</c-select.item>
+                        <c-select.item value="part-time">Part-time</c-select.item>
+                        <c-select.item value="contract">Contract</c-select.item>
+                        <c-select.item value="internship">Internship</c-select.item>
+                      </c-select.content>
+                    </c-select>
+                  </div>
+
+                  <div class="space-y-2">
+                    <c-label for="work-mode">Work Mode</c-label>
+                    <c-select default_value="remote">
+                      <c-select.trigger id="work-mode">
+                        <c-select.value placeholder="Select work mode" />
+                      </c-select.trigger>
+                      <c-select.content>
+                        <c-select.item value="remote">Remote</c-select.item>
+                        <c-select.item value="hybrid">Hybrid</c-select.item>
+                        <c-select.item value="on-site">On-site</c-select.item>
+                      </c-select.content>
+                    </c-select>
+                  </div>
+
+                  <div class="space-y-2">
+                    <c-label for="location">Preferred Location</c-label>
+                    <c-input id="location" value="Dhaka, Bangladesh" />
+                  </div>
+
+                  <div class="space-y-2">
+                    <c-label for="min-salary">Minimum Salary (Monthly)</c-label>
+                    <c-input id="min-salary" type="number" value="80000" />
+                  </div>
+
+                  <div class="space-y-2">
+                    <c-label for="experience">Years of Experience</c-label>
+                    <c-input id="experience" type="number" value="5" />
+                  </div>
+                </div>
+
+                <c-separator />
+
+                <div class="space-y-4">
+                  <h3 class="font-medium">Notification Preferences</h3>
+
+                  <div class="flex items-center justify-between">
+                    <div class="space-y-0.5">
+                      <c-label for="job-alerts">Job Alerts</c-label>
+                      <p class="text-sm text-gray-500">Receive notifications about new job matches</p>
+                    </div>
+                    <c-switch 
+                      name="job-alerts" 
+                      default="true" 
+                      true_value="Yes" 
+                      false_value="No"
+                    />
+                  </div>
+
+                  <div class="flex items-center justify-between">
+                    <div class="space-y-0.5">
+                      <c-label for="application-updates">Application Updates</c-label>
+                      <p class="text-sm text-gray-500">Receive notifications about your job applications</p>
+                    </div>
+                    <c-switch 
+                      name="application-updates" 
+                      default="true" 
+                      true_value="Yes" 
+                      false_value="No"
+                    />
+                  </div>
+
+                  <div class="flex items-center justify-between">
+                    <div class="space-y-0.5">
+                      <c-label for="profile-views">Profile Views</c-label>
+                      <p class="text-sm text-gray-500">
+                        Receive notifications when employers view your profile
+                      </p>
+                    </div>
+                    <c-switch 
+                      name="profile-views" 
+                      default="true" 
+                      true_value="Yes" 
+                      false_value="No"
+                    />
+                  </div>
+                </div>
+              </c-card.content>
+              <c-card.footer>
+                <c-button>Save Preferences</c-button>
+              </c-card.footer>
+          </c-tabs.content>
+        </c-card>
+        </c-tabs>
+      </div>
+    {% else %}
+    <div class="space-y-6">
+        <c-card>
+          <c-card.header class="relative">
+            <div class="absolute right-6 top-6">
+              <c-button>Edit Profile</c-button>
+            </div>
+            <div class="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+              <div class="h-24 w-24 rounded-md bg-gray-200 flex items-center justify-center overflow-hidden">
+                <img
+                  src="{{ request.user.avatar.url}}"
+                  alt="{{ request.user.company_name }}"
+                  class="h-full w-full object-contain p-2"
+                />
+              </div>
+              <div>
+                <c-card.title class="text-2xl">
+                  {{ request.user.company_name }}
+                </c-card.title>
+                <c-card.description class="text-lg">Technology & Software Development</c-card.description>
+                <div class="flex flex-wrap gap-2 mt-2">
+                  <div class="flex items-center text-sm text-gray-500">
+                    {% lucide 'map-pin' size=16 class="mr-1" %}
+                    Dhaka, Bangladesh
+                  </div>
+                  <div class="flex items-center text-sm text-gray-500">
+                    {% lucide 'mail' size=16 class="mr-1" %}
+                    {{ request.user.email }}
+                  </div>
+                  <div class="flex items-center text-sm text-gray-500">
+                    {% lucide 'briefcase' size=16 class="mr-1" %}
+                    50-250 employees
+                  </div>
+                </div>
+              </div>
+            </div>
+          </c-card.header>
+          <c-card.content>
+            <div class="space-y-4">
+              <div>
+                <h3 class="text-lg font-semibold mb-2">About Company</h3>
+                <p class="text-gray-600">
+                  TechCorp BD is a leading technology company in Bangladesh, specializing in web and mobile
+                  application development. We work with clients around the world to deliver high-quality software
+                  solutions. Founded in 2015, we have grown to a team of 100+ talented professionals dedicated to
+                  creating innovative digital products. Our company culture emphasizes collaboration, continuous
+                  learning, and work-life balance.
+                </p>
+              </div>
+            </div>
+          </c-card.content>
+        </c-card>
+
+        <c-tabs default_value="company">
+          <c-tabs.list class="grid w-full grid-cols-3">
+            <c-tabs.trigger value="company">Company Details</c-tabs.trigger>
+            <c-tabs.trigger value="team">Team Members</c-tabs.trigger>
+            <c-tabs.trigger value="preferences">Preferences</c-tabs.trigger>
+          </c-tabs.list>
+
+          <c-tabs.content value="company" class="mt-6">
+            <c-card>
+              <c-card.header>
+                <c-card.title>Company Details</c-card.title>
+              </c-card.header>
+              <c-card.content class="space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div class="space-y-2">
+                    <c-label for="company-name">Company Name</c-label>
+                    <c-input id="company-name" value="TechCorp BD" />
+                  </div>
+
+                  <div class="space-y-2">
+                    <c-label for="industry">Industry</c-label>
+                    <c-select value="technology">
+                      <c-select.trigger id="industry">
+                        <c-select.value placeholder="Select industry" />
+                      </c-select.trigger>
+                      <c-select.content>
+                        <s-select.item value="technology">Technology & IT</s-select.item>
+                        <s-select.item value="finance">Finance & Banking</s-select.item>
+                        <s-select.item value="healthcare">Healthcare</s-select.item>
+                        <s-select.item value="education">Education</s-select.item>
+                        <s-select.item value="retail">Retail & E-commerce</s-select.item>
+                      </c-select.content>
+                    </c-select>
+                  </div>
+
+                  <div class="space-y-2">
+                    <c-label for="company-size">Company Size</c-label>
+                    <c-select value="medium">
+                      <c-select.trigger id="company-size">
+                        <c-select.value placeholder="Select company size" />
+                      </c-select.trigger>
+                      <c-select.content>
+                        <s-select.item value="small-1">1-10 employees</s-select.item>
+                        <s-select.item value="small-2">11-50 employees</s-select.item>
+                        <s-select.item value="medium">51-250 employees</s-select.item>
+                        <s-select.item value="large-1">251-1000 employees</s-select.item>
+                        <s-select.item value="large-2">1000+ employees</s-select.item>
+                      </c-select.content>
+                    </c-select>
+                  </div>
+
+                  <div class="space-y-2">
+                    <c-label for="founded">Founded Year</c-label>
+                    <c-input id="founded" type="number" value="2015" />
+                  </div>
+
+                  <div class="space-y-2">
+                    <c-label for="website">Company Website</c-label>
+                    <c-input id="website" value="https://techcorp.com" />
+                  </div>
+
+                  <div class="space-y-2">
+                    <c-label for="location">Headquarters</c-label>
+                    <c-input id="location" value="Dhaka, Bangladesh" />
+                  </div>
+                </div>
+
+                <div class="space-y-2">
+                  <c-label for="company-description">Company Description</c-label>
+                  <c-textarea
+                    id="company-description"
+                    class="min-h-[150px]"
+                    value="TechCorp BD is a leading technology company in Bangladesh, specializing in web and mobile application development. We work with clients around the world to deliver high-quality software solutions. Founded in 2015, we have grown to a team of 100+ talented professionals dedicated to creating innovative digital products. Our company culture emphasizes collaboration, continuous learning, and work-life balance."
+                  />
+                </div>
+
+                <div class="space-y-2">
+                  <c-label>Company Logo</c-label>
+                  <div class="border-2 border-dashed rounded-lg p-6 flex flex-col items-center justify-center">
+                    {% lucide 'upload' class="h-10 w-10 text-gray-400 mb-2" %}
+                    <p class="text-sm text-gray-600 mb-1">Drag and drop your logo here or click to browse</p>
+                    <p class="text-xs text-gray-500">PNG, JPG or SVG (max. 2MB)</p>
+                    <c-input id="logo-upload" type="file" class="hidden" />
+                    <c-button
+                      variant="outline"
+                      size="sm"
+                      class="mt-4"
+                    >
+                      Select File
+                    </c-button>
+                  </div>
+                </div>
+              </c-card.content>
+              <c-card.footer>
+                <c-button>Save Changes</c-button>
+              </c-card.footer>
+            </c-card>
+          </c-tabs.content>
+
+          <c-tabs.content value="team" class="mt-6">
+            <c-card>
+              <c-card.header>
+                <div class="flex justify-between items-center">
+                  <div>
+                    <c-card.title>Team Members</c-card.title>
+                  <c-card.description>Manage team members who can access your company account</c-card.description>
+                  </div>
+                  <c-button>
+                    {% lucide 'plus' size=16 class="mr-1" %}
+                    Add Team Member
+                  </c-button>
+                </div>
+              </c-card.header>
+              <c-card.content>
+                <div class="space-y-4">
+                  <div class="border rounded-lg p-4 flex justify-between items-center">
+                    <div class="flex items-center gap-3">
+                      <div class="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center">
+                        {% lucide 'user' size=16 class="h-6 w-6 text-gray-400" %}
+                      </div>
+                      <div>
+                        <h3 class="font-medium">Karim Rahman</h3>
+                        <p class="text-sm text-gray-500">karim@techcorp.com</p>
+                      </div>
+                    </div>
+                    <c-badge>Admin</c-badge>
+                  </div>
+
+                  <div class="border rounded-lg p-4 flex justify-between items-center">
+                    <div class="flex items-center gap-3">
+                      <div class="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center">
+                        {% lucide 'user' size=16 class="h-6 w-6 text-gray-400" %}
+                      </div>
+                      <div>
+                        <h3 class="font-medium">Sadia Khan</h3>
+                        <p class="text-sm text-gray-500">sadia@techcorp.com</p>
+                      </div>
+                    </div>
+                    <c-badge variant="outline">Recruiter</c-badge>
+                  </div>
+
+                  <div class="border rounded-lg p-4 flex justify-between items-center">
+                    <div class="flex items-center gap-3">
+                      <div class="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center">
+                        {% lucide 'user' size=16 class="h-6 w-6 text-gray-400" %}
+                      </div>
+                      <div>
+                        <h3 class="font-medium">Arif Hossain</h3>
+                        <p class="text-sm text-gray-500">arif@techcorp.com</p>
+                      </div>
+                    </div>
+                    <c-badge variant="outline">Recruiter</c-badge>
+                  </div>
+                </div>
+              </c-card.content>
+            </c-card>
+          </c-tabs.content>
+
+          <c-tabs.content value="preferences" class="mt-6">
+            <c-card>
+              <c-card.header>
+                <c-card.title>Preferences</c-card.title>
+                <c-card.description>Manage your account preferences and notification settings</c-card.description>
+              </c-card.header>
+              <c-card.content class="space-y-6">
+                <div class="space-y-4">
+                  <h3 class="font-medium">Email Notifications</h3>
+
+                  <div class="flex items-center justify-between">
+                    <div class="space-y-0.5">
+                      <c-label for="application-notifications">New Applications</c-label>
+                      <p class="text-sm text-gray-500">
+                        Receive notifications when candidates apply to your jobs
+                      </p>
+                    </div>
+                    <c-switch 
+                      name="application-notifications" 
+                      default="true" 
+                      true_value="Yes" 
+                      false_value="No"
+                    />
+                  </div>
+
+                  <div class="flex items-center justify-between">
+                    <div class="space-y-0.5">
+                      <c-label for="job-expiry">Job Expiry</c-label>
+                      <p class="text-sm text-gray-500">
+                        Receive notifications when your job postings are about to expire
+                      </p>
+                    </div>
+                    <c-switch 
+                    name="job-expiry" 
+                    default="true" 
+                    true_value="Yes" 
+                    false_value="No"
+                  />
+                  </div>
+
+                  <div class="flex items-center justify-between">
+                    <div class="space-y-0.5">
+                      <c-label for="account-updates">Account Updates</c-label>
+                      <p class="text-sm text-gray-500">
+                        Receive notifications about your account status and billing
+                      </p>
+                    </div>
+                    <c-switch 
+                    name="account-updates" 
+                    default="true" 
+                    true_value="Yes" 
+                    false_value="No"
+                  />
+                  </div>
+                </div>
+
+                <c-separator />
+
+                <div class="space-y-4">
+                  <h3 class="font-medium">Job Posting Preferences</h3>
+
+                  <div class="space-y-2">
+                    <c-label for="default-job-duration">Default Job Posting Duration</c-label>
+                    <Select value="30">
+                      <c-select.trigger id="default-job-duration">
+                        <c-select.value placeholder="Select duration" />
+                      </c-select.trigger>
+                      <c-select.content>
+                        <s-select.item value="15">15 days</s-select.item>
+                        <s-select.item value="30">30 days</s-select.item>
+                        <s-select.item value="45">45 days</s-select.item>
+                        <s-select.item value="60">60 days</s-select.item>
+                      </c-select.content>
+                    </Select>
+                  </div>
+
+                  <div class="flex items-center justify-between">
+                    <div class="space-y-0.5">
+                      <c-label for="auto-renew">Auto-renew Job Postings</c-label>
+                      <p class="text-sm text-gray-500">Automatically renew job postings when they expire</p>
+                    </div>
+                    <c-switch 
+                    name="auto-renew" 
+                    default="true" 
+                    true_value="Yes" 
+                    false_value="No"
+                  />
+                  </div>
+                </div>
+              </c-card.content>
+              <c-card.footer>
+                <c-button>Save Preferences</c-button>
+              </c-card.footer>
+            </c-card>
+          </c-tabs.content>
+        </c-tabs>
+      </div>
+    {% endif %}
+    
+        
+  </div>
 {% endblock %}

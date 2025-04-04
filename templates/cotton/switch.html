@@ -1,0 +1,35 @@
+<c-vars 
+  name="" 
+  default="false" 
+  true_value="true" 
+  false_value="false" 
+/>
+
+<div 
+  x-data="{ 
+    checked: {{ default|lower }} === 'true' 
+  }"
+  class="flex items-center gap-2 {{ class }}"
+  {{ attrs }}
+>
+  <!-- Hidden input for form submission -->
+  {% if name %}
+  <input type="hidden" name="{{ name }}" :value="checked ? '{{ true_value }}' : '{{ false_value }}'">
+  {% endif %}
+
+  <!-- Switch Button -->
+  <button
+    type="button"
+    @click="checked = !checked"
+    class="relative w-12 h-7 flex items-center rounded-full transition-colors duration-300 focus:outline-none"
+    :class="checked ? 'bg-blue-500' : 'bg-gray-300'"
+  >
+    <span
+      class="absolute left-1 w-5 h-5 bg-white rounded-full shadow-md transform transition-transform duration-300"
+      :class="checked ? 'translate-x-5' : 'translate-x-0'"
+    ></span>
+  </button>
+
+  <!-- Optional Label -->
+  <span x-text="checked ? '{{ true_value }}' : '{{ false_value }}'" class="text-sm text-gray-700"></span>
+</div>

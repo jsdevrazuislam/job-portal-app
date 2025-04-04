@@ -1,3 +1,110 @@
 {% extends 'dashboard_layout.html' %} {% block children %}
-<h1>Saved</h1>
+<section>
+  <div class="flex-1 p-8">
+    <h1 class="text-3xl font-bold mb-6">Saved Jobs</h1>
+
+    <div class="mb-6 flex flex-col md:flex-row gap-4 justify-between">
+      <div class="relative w-full md:w-auto md:min-w-[300px]">
+        {% lucide 'search' class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size=20 %}
+        <c-input placeholder="Search saved jobs..." class="pl-10" />
+      </div>
+
+      <c-select value="{sortBy}" onValueChange="{setSortBy}">
+        <c-select.trigger class="w-full md:w-[200px]">
+          <c-select.value placeholder="Sort by" />
+        </c-select.trigger>
+        <c-select.content>
+          <c-select.item value="recent">Recently Saved</c-select.item>
+          <c-select.item value="salary-high">Highest Salary</c-select.item>
+          <c-select.item value="salary-low">Lowest Salary</c-select.item>
+        </c-select.content>
+      </c-select>
+    </div>
+
+    {% if True %}
+    <c-card class="overflow-hidden hover:shadow-md transition-shadow">
+      <c-card.content class="p-6">
+        <div class="flex items-start gap-4">
+          <div
+            class="h-16 w-16 rounded-md overflow-hidden bg-gray-100 flex-shrink-0"
+          >
+            <img
+              src="{job.logo}"
+              alt="{job.company}"
+              class="h-full w-full object-contain p-2"
+            />
+          </div>
+          <div class="flex-1">
+            <h3 class="text-xl font-semibold mb-1">
+              <a href="/" class="hover:text-primary"> {job.title} </a>
+            </h3>
+            <p class="text-gray-600 mb-2">{job.company}</p>
+            <div class="flex flex-wrap gap-2 mb-3">
+              <c-badge variant="default">{job.workMode}</c-badge>
+              <c-badge variant="outline">{job.type}</c-badge>
+            </div>
+            <p class="text-gray-600 text-sm mb-3 line-clamp-2">
+              {job.description}
+            </p>
+            <div
+              class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-gray-500"
+            >
+              <div class="flex items-center gap-1">
+                {% lucide 'map-pin' size=16 %}
+                <span>{job.location}</span>
+              </div>
+              <div class="flex items-center gap-1">
+                {% lucide 'dollar-sign' size=16 %}
+                <span>{job.salary}</span>
+              </div>
+              <div class="flex items-center gap-1">
+                {% lucide 'building' size=16 %}
+                <span>{job.companySize}</span>
+              </div>
+              <div class="flex items-center gap-1">
+                {% lucide 'clock' size=16 %}
+                <span>Posted {job.postedAt}</span>
+              </div>
+            </div>
+            <div class="mt-4 flex items-center justify-between">
+              <div class="text-sm text-gray-500">
+                {% lucide 'bookmark-check' size=16 class="inline mr-1" %}
+                Saved {job.savedAt}
+              </div>
+              <div class="flex gap-2">
+                <c-button
+                  variant="outline"
+                  size="sm"
+                  class="text-red-500 hover:text-red-700 hover:bg-red-50"
+                >
+                  {% lucide 'trash-2' size=16 class="mr-1" %} Remove
+                </c-button>
+                <a href="/">
+                  <c-button size="sm">View Job</c-button>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </c-card.content>
+    </c-card>
+    {% else %}
+    <div class="bg-white rounded-lg shadow-sm border p-8 text-center">
+      <div class="flex justify-center mb-4">
+        {% lucide 'bookmark-check' size=16 class="h-12 w-12 text-gray-400"
+        %}
+      </div>
+      <h3 class="text-xl font-semibold mb-2">No saved jobs found</h3>
+      <p class="text-gray-600 mb-4">
+        {searchTerm ? "We couldn't find any saved jobs matching your search
+        criteria." : "You haven't saved any jobs yet. Browse jobs and save the
+        ones you're interested in."}
+      </p>
+      <a href="/jobs">
+        <button>Browse Jobs</button>
+      </a>
+    </div>
+    {% endif %}
+  </div>
+</section>
 {% endblock %}
