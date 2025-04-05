@@ -16,13 +16,19 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from .views import home
+from .views import home, stripe_webhook, create_checkout_session
+from django.conf import settings
+from django.conf.urls.static import static
+from authentication.views import success_page
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home, name='home'),
+    path("success/", success_page, name="success_page"),
+    path("stripe/webhook/", stripe_webhook, name="stripe_webhook"),
+    path("create-checkout-session/", create_checkout_session, name="create_checkout_session"),
     path('jobs/', include('jobs.urls')),
     path('auth/', include('authentication.urls')),
     path('dashboard/', include('dashboard.urls')),
     path("__reload__/", include("django_browser_reload.urls")),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

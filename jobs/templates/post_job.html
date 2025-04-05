@@ -1,3 +1,297 @@
-{% extends 'dashboard_layout.html' %} {% block children %}
-<h1>Job Post</h1>
+{% extends 'layout.html' %} {% block app_content %}
+<div class="container mx-auto px-4 py-8">
+    <a href="/" class="inline-flex items-center text-primary hover:underline mb-6">
+      {% lucide 'chevron-left' size=16 class="mr-1" %}
+      Back to Home
+    </a>
+
+    <div class="max-w-3xl mx-auto">
+      <h1 class="text-3xl font-bold mb-6">Post a New Job</h1>
+
+      <c-tabs default_value="job-details" class="mb-6">
+        <c-tabs.list class="grid w-full grid-cols-3">
+          <c-tabs.trigger value="job-details">Job Details</c-tabs.trigger>
+          <c-tabs.trigger value="company-details">Company Details</c-tabs.trigger>
+          <c-tabs.trigger value="preview">Preview & Submit</c-tabs.trigger>
+        </c-tabs.list>
+
+        <c-tabs.content value="job-details">
+          <c-card>
+            <c-card.header>
+              <c-card.title>Job Details</c-card.title>
+              <c-card.description>Provide information about the position you're hiring for</c-card.description>
+            </c-card.header>
+            <c-card.content class="space-y-6">
+              <div class="space-y-2">
+                <c-label for="job-title">Job Title</c-label>
+                <c-input id="job-title" placeholder="e.g. Frontend Developer" required />
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="space-y-2">
+                  <c-label for="job-type">Job Type</c-label>
+                  <c-select>
+                    <c-select.trigger id="job-type">
+                      <c-select.value placeholder="Select job type" />
+                    </c-select.trigger>
+                    <c-select.content>
+                      <c-select.item value="full-time">Full-time</c-select.item>
+                      <c-select.item value="part-time">Part-time</c-select.item>
+                      <c-select.item value="contract">Contract</c-select.item>
+                      <c-select.item value="internship">Internship</c-select.item>
+                    </c-select.content>
+                  </c-select>
+                </div>
+
+                <div class="space-y-2">
+                  <c-label for="work-mode">Work Mode</c-label>
+                  <c-select>
+                    <c-select.trigger id="work-mode">
+                      <c-select.value placeholder="Select work mode" />
+                    </c-select.trigger>
+                    <c-select.content>
+                      <c-select.item value="remote">Remote</c-select.item>
+                      <c-select.item value="hybrid">Hybrid</c-select.item>
+                      <c-select.item value="on-site">On-site</c-select.item>
+                    </c-select.content>
+                  </c-select>
+                </div>
+              </div>
+
+              <div class="space-y-2">
+                <c-label for="location">Location</c-label>
+                <c-input id="location" placeholder="e.g. Dhaka, Bangladesh" required />
+              </div>
+
+              <div class="space-y-4">
+                <div class="flex justify-between">
+                  <c-label>Salary Range (৳)</c-label>
+                  <span class="text-sm text-gray-500">
+                    ৳{salaryRange[0].toLocaleString()} - ৳{salaryRange[1].toLocaleString()}
+                  </span>
+                </div>
+                <c-slider
+                    name_min="min_salary" 
+                    name_max="max_salary" 
+                    min="0" 
+                    max="200000" 
+                    step="5000" 
+                    default_min="40000" 
+                    default_max="200000"
+                />
+              </div>
+
+              <div class="space-y-2">
+                <c-label for="job-description">Job Description</c-label>
+                <c-textarea
+                  id="job-description"
+                  placeholder="Describe the responsibilities, requirements, and benefits of the position"
+                  class="min-h-[200px]"
+                  required
+                />
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="space-y-2">
+                  <c-label for="experience">Experience Required</c-label>
+                  <c-select>
+                    <c-select.trigger id="experience">
+                      <c-select.value placeholder="Select experience level" />
+                    </c-select.trigger>
+                    <c-select.content>
+                      <c-select.item value="entry">Entry Level (0-2 years)</c-select.item>
+                      <c-select.item value="mid">Mid Level (2-5 years)</c-select.item>
+                      <c-select.item value="senior">Senior Level (5+ years)</c-select.item>
+                      <c-select.item value="executive">Executive Level</c-select.item>
+                    </c-select.content>
+                  </c-select>
+                </div>
+
+                <div class="space-y-2">
+                  <c-label for="education">Education Required</c-label>
+                  <c-select>
+                    <c-select.trigger id="education">
+                      <c-select.value placeholder="Select education level" />
+                    </c-select.trigger>
+                    <c-select.content>
+                      <c-select.item value="high-school">High School</c-select.item>
+                      <c-select.item value="bachelor">Bachelor's Degree</c-select.item>
+                      <c-select.item value="master">Master's Degree</c-select.item>
+                      <c-select.item value="phd">PhD</c-select.item>
+                      <c-select.item value="any">Any</c-select.item>
+                    </c-select.content>
+                  </c-select>
+                </div>
+              </div>
+            </c-card.content>
+            <c-card.footer class="flex justify-end">
+              <c-button>Continue to Company Details</c-button>
+            </c-card.footer>
+          </c-card>
+        </c-tabs.content>
+
+        <c-tabs.content value="company-details">
+          <c-card>
+            <c-card.header>
+              <c-card.title>Company Details</c-card.title>
+              <c-card.description>Provide information about your company</c-card.description>
+            </c-card.header>
+            <c-card.content class="space-y-6">
+              <div class="space-y-2">
+                <c-label for="company-name">Company Name</c-label>
+                <c-input id="company-name" placeholder="e.g. TechCorp BD" required />
+              </div>
+
+              <div class="space-y-2">
+                <c-label for="company-website">Company Website (Optional)</c-label>
+                <c-input id="company-website" placeholder="e.g. https://example.com" />
+              </div>
+
+              <div class="space-y-2">
+                <c-label for="company-size">Company Size</c-label>
+                <c-select>
+                  <c-select.trigger id="company-size">
+                    <c-select.value placeholder="Select company size" />
+                  </c-select.trigger>
+                  <c-select.content>
+                    <c-select.item value="1-10">Small (1-10 employees)</c-select.item>
+                    <c-select.item value="11-50">Small (11-50 employees)</c-select.item>
+                    <c-select.item value="51-200">Medium (51-200 employees)</c-select.item>
+                    <c-select.item value="201-500">Medium (201-500 employees)</c-select.item>
+                    <c-select.item value="501-1000">Large (501-1000 employees)</c-select.item>
+                    <c-select.item value="1000+">Large (1000+ employees)</c-select.item>
+                  </c-select.content>
+                </c-select>
+              </div>
+
+              <div class="space-y-2">
+                <c-label for="company-description">About Company</c-label>
+                <c-textarea
+                  id="company-description"
+                  placeholder="Describe your company, culture, and why someone would want to work there"
+                  class="min-h-[150px]"
+                  required
+                />
+              </div>
+
+              <div class="space-y-2">
+                <c-label>Company Logo</c-label>
+                <c-label for='logo-upload' class="border-2 border-dashed rounded-lg p-6 flex flex-col items-center justify-center">
+                  {% lucide 'upload' class="h-10 w-10 text-gray-400 mb-2" %}
+                  <p class="text-sm text-gray-600 mb-1">Drag and drop your logo here or click to browse</p>
+                  <p class="text-xs text-gray-500">PNG, JPG or SVG (max. 2MB)</p>
+                  <c-input id="logo-upload" type="file" class="hidden" />
+                 
+                </c-label>
+              </div>
+            </c-card.content>
+            <c-card.footer class="flex justify-between">
+              <c-button variant="outline">Back to Job Details</c-button>
+              <c-button>Continue to Preview</c-button>
+            </c-card.footer>
+          </c-card>
+        </c-tabs.content>
+
+        <c-tabs.content value="preview">
+          <c-card>
+            <c-card.header>
+              <c-card.title>Preview & Submit</c-card.title>
+              <c-card.description>Review your job posting before submitting</c-card.description>
+            </c-card.header>
+            <c-card.content>
+              <div class="bg-gray-50 rounded-lg p-6 space-y-6">
+                <div>
+                  <h3 class="text-lg font-semibold">Senior Frontend Developer</h3>
+                  <p class="text-gray-600">TechCorp BD</p>
+                </div>
+
+                <div class="flex flex-wrap gap-2">
+                  <c-badge variant="outline">Full-time</c-badge>
+                  <c-badge variant="default">Remote</c-badge>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+                  <div class="flex items-center gap-2">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      class="text-gray-500"
+                    >
+                      <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path>
+                      <circle cx="12" cy="10" r="3"></circle>
+                    </svg>
+                    <span>Dhaka, Bangladesh</span>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      class="text-gray-500"
+                    >
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                    <span>Full-time</span>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      class="text-gray-500"
+                    >
+                      <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                    </svg>
+                    <span>৳80,000 - ৳120,000</span>
+                  </div>
+                </div>
+
+                <div>
+                  <h4 class="font-medium mb-2">Job Description</h4>
+                  <p class="text-gray-600 text-sm">
+                    We are looking for an experienced Frontend Developer to join our team. The ideal candidate will
+                    have strong experience with modern JavaScript frameworks and a passion for creating exceptional
+                    user experiences.
+                  </p>
+                </div>
+
+                <div>
+                  <h4 class="font-medium mb-2">About Company</h4>
+                  <p class="text-gray-600 text-sm">
+                    TechCorp BD is a leading technology company in Bangladesh, specializing in web and mobile
+                    application development. We work with clients around the world to deliver high-quality software
+                    solutions.
+                  </p>
+                </div>
+              </div>
+            </c-card.content>
+            <c-card.footer class="flex justify-between">
+              <c-button variant="outline">Back to Company Details</c-button>
+              <c-button>Submit Job Posting</c-button>
+            </c-card.footer>
+          </c-card>
+        </c-tabs.content>
+      </c-tabs>
+    </div>
+  </div>
 {% endblock %}
