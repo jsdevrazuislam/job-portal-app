@@ -1,0 +1,88 @@
+{% extends 'layout.html' %} {% block app_content %}
+<div class="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4">
+    <div class="w-full max-w-2xl">
+      <div class="text-center mb-8">
+        <div class="inline-flex items-center justify-center h-24 w-24 rounded-full bg-green-100">
+            {% lucide 'circle-check' class="h-12 w-12 text-green-600" %}
+        </div>
+        <h1 class="text-3xl font-bold mb-2">Payment Successful!</h1>
+        <p class="text-gray-600 text-lg">Thank you for your payment. Your subscription has been activated.</p>
+      </div>
+
+      <c-card class="mb-8 border-2 border-green-100">
+        <c-card.header class="pb-4">
+          <c-card.title>Payment Details</c-card.title>
+          <c-card.description>Transaction ID: {transaction.id}</c-card.description>
+        </c-card.header>
+        <c-card.content class="pb-4">
+          <div class="space-y-4">
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <p class="text-sm font-medium text-gray-500">Amount Paid</p>
+                <p class="text-xl font-bold">{transaction.amount}</p>
+              </div>
+              <div>
+                <p class="text-sm font-medium text-gray-500">Date</p>
+                <p>{transaction.date}</p>
+              </div>
+            </div>
+
+            <div class="pt-4 border-t border-gray-100">
+              <p class="text-sm font-medium text-gray-500 mb-2">Plan</p>
+              <p class="font-medium">{transaction.plan}</p>
+            </div>
+
+            <div>
+              <p class="text-sm font-medium text-gray-500 mb-2">Payment Method</p>
+              <p>{transaction.paymentMethod}</p>
+            </div>
+
+            <div class="pt-4 border-t border-gray-100 flex items-center">
+              {% lucide 'calendar' class="h-5 w-5 text-gray-400 mr-2"  %}
+              <div>
+                <p class="text-sm font-medium text-gray-500">Next Billing Date</p>
+                <p>{transaction.nextBillingDate}</p>
+              </div>
+            </div>
+          </div>
+        </c-card.content>
+        <c-card.footer class="flex justify-between pt-2">
+          <c-button variant="outline" class="gap-2">
+            {% lucide 'download'  class="h-4 w-4" %}
+            Download Receipt
+          </c-button>
+          <c-button variant="ghost" class="text-primary">
+            View Invoice
+          </c-button>
+        </c-card.footer>
+      </c-card>
+
+      <div class="bg-blue-50 border border-blue-100 rounded-lg p-4 mb-8 flex items-start">
+        <div class="bg-blue-100 rounded-full p-2 mr-4 mt-1">
+          {% lucide 'circle-check' class="h-5 w-5 text-blue-600" %}
+        </div>
+        <div>
+          <h3 class="font-medium text-blue-800 mb-1">Your subscription is now active</h3>
+          <p class="text-blue-700 text-sm">
+            You can now post jobs, access all features of your Business Plan, and start receiving applications.
+          </p>
+        </div>
+      </div>
+
+      <div class="flex flex-col sm:flex-row gap-4">
+        <a href="/dashboard" class="flex-1">
+          <c-button class="w-full gap-2">
+             {% lucide 'house' class="h-4 w-4"  %}
+            Go to Dashboard
+          </c-button>
+        </a>
+        <a href="/jobs/post-job" class="flex-1">
+          <c-button variant="outline" class="w-full gap-2">
+            Post a Job
+            {% lucide 'arrow-right' class="h-4 w-4"  %}
+          </c-button>
+        </a>
+      </div>
+    </div>
+  </div>
+{% endblock %}

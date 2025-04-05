@@ -14,6 +14,8 @@ from django.http import JsonResponse
 from django.contrib import messages
 from django.contrib.sites.shortcuts import get_current_site
 from django.urls import reverse
+from django.contrib.auth.decorators import login_required
+from .models import UserSubscription
 
 User = get_user_model()
 
@@ -65,6 +67,18 @@ def register(request):
             messages.error(request, 'Invalid Form')
     context = {"form": form} 
     return render(request, 'register.html', context)
+
+def price_page_view(request):
+    return render(request, 'price.html')
+
+@login_required(login_url='/auth/login')
+def success_page(request):
+    subscriptions = UserSubscription.objects.filter(user=request.user)
+    if subscriptions.exists():
+        subscription = subscriptions.latest('created_at')
+    else:
+        subscription = None
+    return render(request, 'success.html', { 'subscription': subscription})
 
 def user_logout(request):
     if request.method == 'POST':

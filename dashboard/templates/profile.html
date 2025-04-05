@@ -342,21 +342,24 @@
             </div>
             <div class="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
               <div class="h-24 w-24 rounded-md bg-gray-200 flex items-center justify-center overflow-hidden">
+                {% if user.company_profile.logo %}
                 <img
-                  src="{{ request.user.avatar.url}}"
-                  alt="{{ request.user.company_name }}"
-                  class="h-full w-full object-contain p-2"
+                  src="{{ user.company_profile.logo.url }}"
+                  alt="{{ user.company_profile.name }}"
+                  class="h-full w-full object-cover"
                 />
+              {% endif %}
+
               </div>
               <div>
-                <c-card.title class="text-2xl">
+                <c-card.title class="text-2xl capitalize">
                   {{ request.user.company_name }}
                 </c-card.title>
-                <c-card.description class="text-lg">Technology & Software Development</c-card.description>
+                <c-card.description class="text-lg capitalize mt-1">{{ user.company_profile.industry }}</c-card.description>
                 <div class="flex flex-wrap gap-2 mt-2">
                   <div class="flex items-center text-sm text-gray-500">
                     {% lucide 'map-pin' size=16 class="mr-1" %}
-                    Dhaka, Bangladesh
+                    {{ user.company_profile.location }}
                   </div>
                   <div class="flex items-center text-sm text-gray-500">
                     {% lucide 'mail' size=16 class="mr-1" %}
@@ -364,7 +367,7 @@
                   </div>
                   <div class="flex items-center text-sm text-gray-500">
                     {% lucide 'briefcase' size=16 class="mr-1" %}
-                    50-250 employees
+                    {{  user.company_profile.company_size }}
                   </div>
                 </div>
               </div>
@@ -375,11 +378,7 @@
               <div>
                 <h3 class="text-lg font-semibold mb-2">About Company</h3>
                 <p class="text-gray-600">
-                  TechCorp BD is a leading technology company in Bangladesh, specializing in web and mobile
-                  application development. We work with clients around the world to deliver high-quality software
-                  solutions. Founded in 2015, we have grown to a team of 100+ talented professionals dedicated to
-                  creating innovative digital products. Our company culture emphasizes collaboration, continuous
-                  learning, and work-life balance.
+                  {{  user.company_profile.description }}
                 </p>
               </div>
             </div>
@@ -394,6 +393,8 @@
           </c-tabs.list>
 
           <c-tabs.content value="company" class="mt-6">
+           <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
             <c-card>
               <c-card.header>
                 <c-card.title>Company Details</c-card.title>
@@ -402,87 +403,111 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div class="space-y-2">
                     <c-label for="company-name">Company Name</c-label>
-                    <c-input id="company-name" value="TechCorp BD" />
+                    <c-input name='name' id="company-name" value="{{ user.company_profile.name }}" />
                   </div>
 
                   <div class="space-y-2">
                     <c-label for="industry">Industry</c-label>
-                    <c-select value="technology">
+                    <c-select name="industry" value="technology">
                       <c-select.trigger id="industry">
-                        <c-select.value placeholder="Select industry" />
+                        
+                        {% if user.company_profile.industry %}
+                         <c-select.value placeholder="{{ user.company_profile.industry }}" />
+                        {% else %}
+                          <c-select.value placeholder="Select industry" />
+                        {% endif %}
                       </c-select.trigger>
                       <c-select.content>
-                        <s-select.item value="technology">Technology & IT</s-select.item>
-                        <s-select.item value="finance">Finance & Banking</s-select.item>
-                        <s-select.item value="healthcare">Healthcare</s-select.item>
-                        <s-select.item value="education">Education</s-select.item>
-                        <s-select.item value="retail">Retail & E-commerce</s-select.item>
+                        <c-select.item value="Technology & IT">Technology & IT</c-select.item>
+                        <c-select.item value="Finance & Banking">Finance & Banking</c-select.item>
+                        <c-select.item value="Healthcare">Healthcare</c-select.item>
+                        <c-select.item value="Education">Education</c-select.item>
+                        <c-select.item value="Retail & E-commerce">Retail & E-commerce</c-select.item>
                       </c-select.content>
                     </c-select>
                   </div>
 
                   <div class="space-y-2">
                     <c-label for="company-size">Company Size</c-label>
-                    <c-select value="medium">
+                    <c-select name="company_size" value="medium">
                       <c-select.trigger id="company-size">
-                        <c-select.value placeholder="Select company size" />
+                        {% if user.company_profile.company_size %}
+                        <c-select.value placeholder="{{ user.company_profile.company_size }}" />
+                       {% else %}
+                       <c-select.value placeholder="Select company size" />
+                       {% endif %}
                       </c-select.trigger>
                       <c-select.content>
-                        <s-select.item value="small-1">1-10 employees</s-select.item>
-                        <s-select.item value="small-2">11-50 employees</s-select.item>
-                        <s-select.item value="medium">51-250 employees</s-select.item>
-                        <s-select.item value="large-1">251-1000 employees</s-select.item>
-                        <s-select.item value="large-2">1000+ employees</s-select.item>
+                        <c-select.item value="1-10 employees">1-10 employees</c-select.item>
+                        <c-select.item value="11-50 employees">11-50 employees</c-select.item>
+                        <c-select.item value="51-250 employees">51-250 employees</c-select.item>
+                        <c-select.item value="251-1000 employees">251-1000 employees</c-select.item>
+                        <c-select.item value="1000+ employees">1000+ employees</c-select.item>
                       </c-select.content>
                     </c-select>
                   </div>
 
                   <div class="space-y-2">
                     <c-label for="founded">Founded Year</c-label>
-                    <c-input id="founded" type="number" value="2015" />
+                    <c-input name="build_year" id="founded" type="number" value="{{ user.company_profile.build_year }}" />
                   </div>
 
                   <div class="space-y-2">
                     <c-label for="website">Company Website</c-label>
-                    <c-input id="website" value="https://techcorp.com" />
+                    <c-input name="website" id="website" value="{{ user.company_profile.website }}" />
                   </div>
 
                   <div class="space-y-2">
                     <c-label for="location">Headquarters</c-label>
-                    <c-input id="location" value="Dhaka, Bangladesh" />
+                    <c-input name="location" id="location" value="{{ user.company_profile.location }}" />
                   </div>
                 </div>
 
                 <div class="space-y-2">
                   <c-label for="company-description">Company Description</c-label>
                   <c-textarea
-                    id="company-description"
-                    class="min-h-[150px]"
-                    value="TechCorp BD is a leading technology company in Bangladesh, specializing in web and mobile application development. We work with clients around the world to deliver high-quality software solutions. Founded in 2015, we have grown to a team of 100+ talented professionals dedicated to creating innovative digital products. Our company culture emphasizes collaboration, continuous learning, and work-life balance."
-                  />
+                  id="company-description"
+                  name="description"
+                  class="min-h-[150px]"
+                />
+
                 </div>
 
                 <div class="space-y-2">
                   <c-label>Company Logo</c-label>
-                  <div class="border-2 border-dashed rounded-lg p-6 flex flex-col items-center justify-center">
-                    {% lucide 'upload' class="h-10 w-10 text-gray-400 mb-2" %}
-                    <p class="text-sm text-gray-600 mb-1">Drag and drop your logo here or click to browse</p>
-                    <p class="text-xs text-gray-500">PNG, JPG or SVG (max. 2MB)</p>
-                    <c-input id="logo-upload" type="file" class="hidden" />
-                    <c-button
-                      variant="outline"
-                      size="sm"
-                      class="mt-4"
-                    >
-                      Select File
-                    </c-button>
+                
+                  {% if user.company_profile.logo %}
+                    <div id="logo-preview" class="flex items-center gap-4">
+                      <img src="{{ user.company_profile.logo.url }}" alt="Logo" class="h-20 w-20 object-cover border" />
+                      <button type="button" id="delete_logo" class="text-red-600 border border-red-300 rounded px-2 py-1 hover:bg-red-50">
+                        Delete
+                      </button>
+                    </div>
+                  {% else %}
+                  <div id="logo-upload-section">
+                    <c-label for="logo-upload" class="border-2 border-dashed rounded-lg p-6 flex flex-col items-center justify-center cursor-pointer">
+                      {% lucide 'upload' class="h-10 w-10 text-gray-400 mb-2" %}
+                      <p class="text-sm text-gray-600 mb-1">Drag and drop your logo here or click to browse</p>
+                      <p class="text-xs text-gray-500">PNG, JPG or SVG (max. 2MB)</p>
+                      <c-input name="logo" id="logo-upload" type="file" class="hidden" accept="image/*" />
+                    </c-label>
+                  
+                    <div id="logo-preview" class="mt-4 hidden relative w-40">
+                      <img id="preview-image" class="w-full h-full border rounded object-cover object-top" />
+                      <button type="button" id="remove-logo" class="absolute top-1 right-1 bg-red-500 text-white rounded-full px-2 py-1 text-xs">
+                        ✕
+                      </button>
+                    </div>
                   </div>
+                  {% endif %}
                 </div>
+                
               </c-card.content>
               <c-card.footer>
                 <c-button>Save Changes</c-button>
               </c-card.footer>
             </c-card>
+           </form>
           </c-tabs.content>
 
           <c-tabs.content value="team" class="mt-6">
@@ -607,17 +632,17 @@
 
                   <div class="space-y-2">
                     <c-label for="default-job-duration">Default Job Posting Duration</c-label>
-                    <Select value="30">
+                    <c-select value="30">
                       <c-select.trigger id="default-job-duration">
                         <c-select.value placeholder="Select duration" />
                       </c-select.trigger>
                       <c-select.content>
-                        <s-select.item value="15">15 days</s-select.item>
-                        <s-select.item value="30">30 days</s-select.item>
-                        <s-select.item value="45">45 days</s-select.item>
-                        <s-select.item value="60">60 days</s-select.item>
+                        <c-select.item value="15">15 days</c-select.item>
+                        <c-select.item value="30">30 days</c-select.item>
+                        <c-select.item value="45">45 days</c-select.item>
+                        <c-select.item value="60">60 days</c-select.item>
                       </c-select.content>
-                    </Select>
+                    </c-select>
                   </div>
 
                   <div class="flex items-center justify-between">
@@ -645,4 +670,77 @@
     
         
   </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const deleteBtn = document.getElementById("delete_logo");
+      const fileInput = document.getElementById("logo-upload");
+      const previewImage = document.getElementById("preview-image");
+      const previewContainer = document.getElementById("logo-preview");
+      const removeButton = document.getElementById("remove-logo");
+      const descriptionText = `{{ user.company_profile.description|escapejs }}`;
+      const descriptionField = document.getElementById("company-description");
+
+      if (descriptionField) {
+        descriptionField.value = descriptionText;
+      }
+    
+      if (deleteBtn) {
+        deleteBtn.addEventListener("click", function (e) {
+          e.preventDefault(); 
+    
+          fetch("{% url 'delete_company_logo' %}", {
+            method: "POST",
+            headers: {
+              "X-CSRFToken": "{{ csrf_token }}",
+            },
+          })
+          .then((response) => response.json())
+          .then((data) => {
+            console.log(data)
+            if (data.success) {
+              const inputHTML = `
+                <c-label for="logo-upload" class="border-2 border-dashed rounded-lg p-6 flex flex-col items-center justify-center cursor-pointer">
+                  {% lucide 'upload' class="h-10 w-10 text-gray-400 mb-2" %}
+                  <p class="text-sm text-gray-600 mb-1">Drag and drop your logo here or click to browse</p>
+                  <p class="text-xs text-gray-500">PNG, JPG or SVG (max. 2MB)</p>
+                  <c-input name="logo" id="logo-upload" type="file" class="hidden" />
+                </c-label>
+              `;
+              const container = document.querySelector(".space-y-2");
+              container.insertAdjacentHTML("beforeend", inputHTML);
+              showToast("Logo deleted successfully!", "success");
+              window.location.reload()
+            } else {
+              showToast("Failed to delete logo.", "error");
+            }
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+            showToast("An error occurred while deleting.", "error");
+          });
+        });
+      }
+
+    fileInput.addEventListener("change", function () {
+      const file = this.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          previewImage.src = e.target.result;
+          previewContainer.classList.remove("hidden");
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    removeButton.addEventListener("click", function () {
+      fileInput.value = "";
+      previewImage.src = "";
+      previewContainer.classList.add("hidden");
+    });
+
+    });
+    </script>
+    
 {% endblock %}

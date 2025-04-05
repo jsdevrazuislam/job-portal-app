@@ -1,0 +1,193 @@
+{% extends 'layout.html' %} {% block app_content %}
+<div class="bg-gray-50 py-16">
+    <div class="container mx-auto px-4">
+      <div class=" mx-auto text-center mb-12">
+        <h1 class="text-4xl font-bold mb-4">Simple, Transparent Pricing</h1>
+        <p class="text-xl text-gray-600 mb-6">Choose the plan that's right for your business</p>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <c-card class="border-2 border-gray-200 hover:border-primary hover:shadow-lg transition-all">
+            <c-card.header>
+              <c-card.title class="text-2xl">Basic</c-card.title>
+              <c-card.description>For small businesses just getting started</c-card.description>
+              <div class="mt-4">
+                <span class="text-4xl font-bold">৳5,000</span>
+                <span class="text-gray-500 ml-2">/month</span>
+              </div>
+            </c-card.header>
+            <c-card.content>
+              <ul class="space-y-3">
+                <c-price_item included="true">
+                  <strong>3</strong> active job postings
+                </c-price_item>
+                <c-price_item included="true">
+                  <strong>30-day</strong> job listing duration
+                </c-price_item>
+                <c-price_item included="true">Basic applicant tracking</c-price_item>
+                <c-price_item included="true">Email support</c-price_item>
+                <c-price_item included="false">Featured job listings</c-price_item>
+                <c-price_item included="false">Company profile page</c-price_item>
+                <c-price_item included="false">Applicant screening tools</c-price_item>
+                <c-price_item included="false">Priority support</c-price_item>
+              </ul>
+            </c-card.content>
+            <c-card.footer>
+              <c-button data-price-id="price_1RAUksRY01Z2IS7AXSD2UOSF" class="w-full" variant="outline">
+                Get Started
+              </c-button>
+            </c-card.footer>
+          </c-card>
+
+          <c-card class="border-2 border-primary relative hover:shadow-lg transition-all">
+            <div class="absolute top-0 right-0 transform translate-x-2 -translate-y-2">
+              <c-badge class="bg-primary text-white">Most Popular</c-badge>
+            </div>
+            <c-card.header>
+              <c-card.title class="text-2xl">Business</c-card.title>
+              <c-card.description>For growing companies with active hiring needs</c-card.description>
+              <div class="mt-4">
+                <span class="text-4xl font-bold">৳15,000</span>
+                <span class="text-gray-500 ml-2">/month</span>
+              </div>
+            </c-card.header>
+            <c-card.content>
+              <ul class="space-y-3">
+                <c-price_item included="true">
+                  <strong>10</strong> active job postings
+                </c-price_item>
+                <c-price_item included="true">
+                  <strong>45-day</strong> job listing duration
+                </c-price_item>
+                <c-price_item included="true">Advanced applicant tracking</c-price_item>
+                <c-price_item included="true">Email & phone support</c-price_item>
+                <c-price_item included="true">Featured job listings</c-price_item>
+                <c-price_item included="true">Company profile page</c-price_item>
+                <c-price_item included="false">Applicant screening tools</c-price_item>
+                <c-price_item included="false">Priority support</c-price_item>
+              </ul>
+            </c-card.content>
+            <c-card.footer>
+              <c-button data-price-id="price_1RAUm7RY01Z2IS7A1uDkf9OV" class="w-full">Get Started</c-button>
+            </c-card.footer>
+          </c-card>
+
+          <c-card class="border-2 border-gray-200 hover:border-primary hover:shadow-lg transition-all">
+            <c-card.header>
+              <c-card.title class="text-2xl">Enterprise</c-card.title>
+              <c-card.description>For large organizations with high-volume hiring</c-card.description>
+              <div class="mt-4">
+                <span class="text-4xl font-bold">৳30,000</span>
+                <span class="text-gray-500 ml-2">/month</span>
+              </div>
+            </c-card.header>
+            <c-card.content>
+              <ul class="space-y-3">
+                <c-price_item included="true">
+                  <strong>Unlimited</strong> active job postings
+                </c-price_item>
+                <c-price_item included="true">
+                  <strong>60-day</strong> job listing duration
+                </c-price_item>
+                <c-price_item included="true">Premium applicant tracking</c-price_item>
+                <c-price_item included="true">24/7 priority support</c-price_item>
+                <c-price_item included="true">Featured job listings</c-price_item>
+                <c-price_item included="true">Enhanced company profile</c-price_item>
+                <c-price_item included="true">Advanced applicant screening tools</c-price_item>
+                <c-price_item included="true">Dedicated account manager</c-price_item>
+              </ul>
+            </c-card.content>
+            <c-card.footer>
+              <c-button data-price-id="price_1RAUmeRY01Z2IS7ATKscD3r8" class="w-full" variant="outline">
+                Get Started
+              </c-button>
+            </c-card.footer>
+          </c-card>
+        </div>
+      </div>
+
+      
+
+      <div class="mt-16 max-w-3xl mx-auto">
+        <h2 class="text-2xl font-bold mb-6 text-center">Frequently Asked Questions</h2>
+
+        <div class="space-y-6">
+          <div class="bg-white p-6 rounded-lg shadow-sm">
+            <h3 class="text-lg font-semibold mb-2">Can I change plans later?</h3>
+            <p class="text-gray-600">
+              Yes, you can upgrade or downgrade your plan at any time. When upgrading, you'll be charged the prorated
+              difference. When downgrading, the new rate will apply at the start of your next billing cycle.
+            </p>
+          </div>
+
+          <div class="bg-white p-6 rounded-lg shadow-sm">
+            <h3 class="text-lg font-semibold mb-2">What payment methods do you accept?</h3>
+            <p class="text-gray-600">
+              We accept all major credit cards, bKash, Nagad, and bank transfers for annual plans. For Enterprise
+              plans, we also offer invoice-based payments with net-30 terms.
+            </p>
+          </div>
+
+          <div class="bg-white p-6 rounded-lg shadow-sm">
+            <h3 class="text-lg font-semibold mb-2">Is there a free trial?</h3>
+            <p class="text-gray-600">
+              Yes, we offer a 14-day free trial for all plans. No credit card is required to start your trial. You can
+              upgrade to a paid plan at any time during or after your trial.
+            </p>
+          </div>
+
+          <div class="bg-white p-6 rounded-lg shadow-sm">
+            <h3 class="text-lg font-semibold mb-2">What happens when my job postings expire?</h3>
+            <p class="text-gray-600">
+              When a job posting expires, it will no longer appear in search results or on your public company page.
+              However, you can still access all applications received and can choose to renew or repost the job at any
+              time.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-16 bg-primary text-white p-8 rounded-xl text-center">
+        <h2 class="text-2xl font-bold mb-4">Need a custom solution?</h2>
+        <p class="text-lg mb-6 max-w-2xl mx-auto">
+          We offer custom plans for organizations with specific requirements. Contact our sales team to discuss your
+          needs.
+        </p>
+        <c-button variant="secondary" size="lg">
+          Contact Sales
+        </c-button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.querySelectorAll("[data-price-id]").forEach(button => {
+      button.addEventListener("click", () => {
+        const priceId = button.getAttribute("data-price-id");
+    
+        fetch("/create-checkout-session/", {
+          method: "POST",
+          headers: {
+            "X-CSRFToken": "{{ csrf_token }}",
+          },
+          body: JSON.stringify({ price_id: priceId }),
+        })
+        .then(async (res) => {
+          const text = await res.text();
+          console.log("Server Response:", text); 
+          return JSON.parse(text);
+        })
+        .then(data => {
+          if (data.checkout_url) {
+            window.location.href = data.checkout_url;
+          } else {
+            showToast("Please login first!", "info")
+          }
+        })
+        .catch(error => console.error("Error:", error));
+        
+        
+      });
+    });
+    
+  </script>
+{% endblock %}
