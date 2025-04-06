@@ -161,12 +161,18 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp-relay.brevo.com'
+EMAIL_HOST = os.getenv("HOST")
 EMAIL_USE_TLS = False
 EMAIL_PORT = 587
 EMAIL_HOST_USER = os.getenv('GMAIL')
 EMAIL_HOST_PASSWORD = os.getenv('PASSWORD')
 DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL')
+
+# Stripe config
+STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY")
+STRIPE_WEBHOOK_SECRET = os.getenv("STRIPE_WEBHOOK_SECRET")
+STRIPE_PUBLISHABLE_KEY = os.getenv("STRIPE_PUBLISHABLE_KEY")
+
 
 # Custom styling for message levels
 MESSAGE_STORAGE = "django.contrib.messages.storage.session.SessionStorage"

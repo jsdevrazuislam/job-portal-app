@@ -18,28 +18,13 @@
 <body>
  <div id="toast-container" class="toast-container"></div>
   {% block content %}{% endblock %}
+  <script defer src="{% static 'js/toast.js' %}"></script>
   <script>
     document.addEventListener("DOMContentLoaded", function () {
-        function showToast(message, type = "info") {
-            const toastContainer = document.getElementById("toast-container");
-            const toast = document.createElement("div");
-            toast.className = `toast toast-${type}`;
-            toast.innerHTML = `
-                <span>${message}</span>
-                <button class="close-toast" onclick="this.parentElement.remove()">×</button>
-            `;
-            
-            toastContainer.appendChild(toast);
-    
-            setTimeout(() => {
-                toast.remove();
-            }, 3000);
-        }
-    
         {% for message in messages %}
-            showToast("{{ message }}", "{{ message.tags }}");
+          showToast("{{ message|escapejs }}", "{{ message.tags }}");
         {% endfor %}
-    });
+      });
     </script>
     <script defer src="{% static 'js/alpine.min.js' %}"></script>
 
