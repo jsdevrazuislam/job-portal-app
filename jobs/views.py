@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect, get_object_or_404
 from jobs.decorators import subscription_required
 from .forms import JobPostForm
 from django.contrib import messages
@@ -44,7 +44,8 @@ def view_jobs(request):
     return render(request, 'view_jobs.html', {"jobs": jobs})
 
 def job_details(request, job_id):
-    return render(request, 'single_job_details.html')
+    job = get_object_or_404(PostJobModel, pk=job_id)
+    return render(request, 'single_job_details.html', {"job": job})
 
 @subscription_required
 def post_job(request):

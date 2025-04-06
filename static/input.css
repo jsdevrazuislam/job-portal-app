@@ -165,3 +165,14 @@
     from { opacity: 0; transform: translateY(-10px); }
     to { opacity: 1; transform: translateY(0); }
 }
+
+.description h1{
+    font-size: 1.5em;
+}
+.description p:first-child{
+    margin-bottom: 1em;
+}
+.description ul{
+    list-style: disc;
+    padding: 10px;
+}
