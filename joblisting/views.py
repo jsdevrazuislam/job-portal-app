@@ -1,12 +1,11 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 import stripe
 from django.http import HttpResponse, JsonResponse
 from django.conf import settings
 from authentication.models import CustomUser, UserSubscription
-from django.contrib.auth.decorators import login_required
 import json
-import datetime
+from datetime import date
 
 
 def home(request):
@@ -20,6 +19,7 @@ def create_checkout_session(request):
     if request.method == 'POST':
         data = json.loads(request.body)
         price_id = data.get('price_id')
+        name = data.get('name')
 
         try:
             session = stripe.checkout.Session.create(
@@ -33,7 +33,8 @@ def create_checkout_session(request):
                 }],
                 metadata={
                      'user_id': request.user.id,
-                     'customer_email': request.user.email
+                     'customer_email': request.user.email,
+                     'name': name
                 }
             )
             return JsonResponse({'checkout_url': session.url})
@@ -61,40 +62,61 @@ def stripe_webhook(request):
 
     if event['type'] == 'checkout.session.completed':
         session = event['data']['object']
-        user_id = session.get('metadata', {}).get('user_id')
+        plan_name = session.get('metadata', {}).get('name')
 
-    try:
-        user = CustomUser.objects.get(id=user_id)
-    except CustomUser.DoesNotExist:
-        return HttpResponse(status=400)
+        print("session.get('metadata', {}).get('name')", session.get('metadata', {}))
 
-    try:
-        customer_id = session.get('customer')
-        subscription_id = session.get('subscription')
+        try:
+            user_id = session.get('metadata', {}).get('user_id')
+            user = CustomUser.objects.get(id=int(user_id))
+        except CustomUser.DoesNotExist:
+            return HttpResponse(status=400)
 
-        invoice = stripe.Invoice.retrieve(session['invoice'])
-        payment_intent_id = invoice['payment_intent']
-        payment_intent = stripe.PaymentIntent.retrieve(payment_intent_id)
+        try:
+            customer_id = session.get('customer')
+            subscription_id = session.get('subscription')
 
-        subscription = stripe.Subscription.retrieve(subscription_id)
+            subscription = stripe.Subscription.retrieve(
+                subscription_id,
+                expand=["items"]
+            )
 
-        UserSubscription.objects.create(
-            user=user,
-            stripe_subscription_id=subscription.id,
-            stripe_customer_id=customer_id,
-            plan_name=subscription['items']['data'][0]['price'].get('nickname', 'Custom Plan'),
-            amount_paid=invoice['amount_paid'] / 100,
-            currency=invoice['currency'],
-            payment_method=payment_intent['payment_method_types'][0],
-            transaction_id=payment_intent['id'],
-            invoice_url=invoice['hosted_invoice_url'],
-            receipt_url=invoice['invoice_pdf'],
-            start_date=datetime.fromtimestamp(subscription['start_date']),
-            next_billing_date=datetime.fromtimestamp(subscription['current_period_end']),
-        )
-    except Exception as e:
-        print("❌ Error saving subscription:", e)
-        return HttpResponse(status=500)
+            invoice_id = session.get('invoice')
+            if invoice_id:
+                invoice = stripe.Invoice.retrieve(invoice_id)
+                invoice_url = invoice.get('hosted_invoice_url')
+                receipt_url = invoice.get('invoice_pdf')
+                amount_paid = invoice.get('amount_paid', 0) / 100
+                currency = invoice.get('currency')
+            else:
+                invoice_url = ''
+                receipt_url = ''
+                amount_paid = 0
+                currency = 'usd' 
+
+            payment_method = 'N/A'
+            transaction_id = session.get('payment_intent') or 'N/A'
+
+            print(subscription['items']['data'][0]['current_period_end'])
+
+            UserSubscription.objects.create(
+                user=user,
+                stripe_subscription_id=subscription.id,
+                stripe_customer_id=customer_id,
+                plan_name=plan_name,
+                amount_paid=amount_paid,
+                currency=currency,
+                payment_method=payment_method,
+                transaction_id=transaction_id,
+                invoice_url=invoice_url,
+                receipt_url=receipt_url,
+                start_date=date.fromtimestamp(subscription['start_date']),
+                next_billing_date=date.fromtimestamp(subscription['items']['data'][0]['current_period_end']),
+            )
+
+        except Exception as e:
+            print("❌ Error saving subscription:", e)
+            return HttpResponse(status=500)
 
 
     return HttpResponse(status=200)

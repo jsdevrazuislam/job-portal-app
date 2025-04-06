@@ -12,48 +12,52 @@
       <c-card class="mb-8 border-2 border-green-100">
         <c-card.header class="pb-4">
           <c-card.title>Payment Details</c-card.title>
-          <c-card.description>Transaction ID: {transaction.id}</c-card.description>
+          <c-card.description>Transaction ID: {{ subscription.stripe_subscription_id }}</c-card.description>
         </c-card.header>
         <c-card.content class="pb-4">
           <div class="space-y-4">
             <div class="grid grid-cols-2 gap-4">
               <div>
                 <p class="text-sm font-medium text-gray-500">Amount Paid</p>
-                <p class="text-xl font-bold">{transaction.amount}</p>
+                <p class="text-xl font-bold"> {{ subscription.amount_paid }} {{ subscription.currency }} </p>
               </div>
               <div>
                 <p class="text-sm font-medium text-gray-500">Date</p>
-                <p>{transaction.date}</p>
+                <p>{{ subscription.created_at }}</p>
               </div>
             </div>
 
             <div class="pt-4 border-t border-gray-100">
               <p class="text-sm font-medium text-gray-500 mb-2">Plan</p>
-              <p class="font-medium">{transaction.plan}</p>
+              <p class="font-medium">{{ subscription.plan_name }}</p>
             </div>
 
             <div>
               <p class="text-sm font-medium text-gray-500 mb-2">Payment Method</p>
-              <p>{transaction.paymentMethod}</p>
+              <p>{{ subscription.payment_method }}</p>
             </div>
 
             <div class="pt-4 border-t border-gray-100 flex items-center">
               {% lucide 'calendar' class="h-5 w-5 text-gray-400 mr-2"  %}
               <div>
                 <p class="text-sm font-medium text-gray-500">Next Billing Date</p>
-                <p>{transaction.nextBillingDate}</p>
+                <p>{{ subscription.next_billing_date }}</p>
               </div>
             </div>
           </div>
         </c-card.content>
         <c-card.footer class="flex justify-between pt-2">
-          <c-button variant="outline" class="gap-2">
-            {% lucide 'download'  class="h-4 w-4" %}
-            Download Receipt
-          </c-button>
-          <c-button variant="ghost" class="text-primary">
-            View Invoice
-          </c-button>
+          <a href="{{ subscription.receipt_url }}" download>
+            <c-button variant="outline" class="gap-2">
+              {% lucide 'download'  class="h-4 w-4" %}
+              Download Receipt
+            </c-button>
+          </a>
+          <a href="{{ subscription.invoice_url }}" target="_blank">
+            <c-button variant="ghost" class="text-primary">
+              View Invoice
+            </c-button>
+          </a>
         </c-card.footer>
       </c-card>
 

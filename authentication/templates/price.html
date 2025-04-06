@@ -32,7 +32,7 @@
               </ul>
             </c-card.content>
             <c-card.footer>
-              <c-button data-price-id="price_1RAUksRY01Z2IS7AXSD2UOSF" class="w-full" variant="outline">
+              <c-button data-price-id="price_1RAUksRY01Z2IS7AXSD2UOSF" data-plan-name='Basic' class="w-full" variant="outline">
                 Get Started
               </c-button>
             </c-card.footer>
@@ -67,7 +67,7 @@
               </ul>
             </c-card.content>
             <c-card.footer>
-              <c-button data-price-id="price_1RAUm7RY01Z2IS7A1uDkf9OV" class="w-full">Get Started</c-button>
+              <c-button data-price-id="price_1RAUm7RY01Z2IS7A1uDkf9OV" data-plan-name='Business' class="w-full">Get Started</c-button>
             </c-card.footer>
           </c-card>
 
@@ -97,7 +97,7 @@
               </ul>
             </c-card.content>
             <c-card.footer>
-              <c-button data-price-id="price_1RAUmeRY01Z2IS7ATKscD3r8" class="w-full" variant="outline">
+              <c-button data-plan-name='Enterprise' data-price-id="price_1RAUmeRY01Z2IS7ATKscD3r8" class="w-full" variant="outline">
                 Get Started
               </c-button>
             </c-card.footer>
@@ -163,13 +163,14 @@
     document.querySelectorAll("[data-price-id]").forEach(button => {
       button.addEventListener("click", () => {
         const priceId = button.getAttribute("data-price-id");
+        const name = button.getAttribute("data-plan-name");
     
         fetch("/create-checkout-session/", {
           method: "POST",
           headers: {
             "X-CSRFToken": "{{ csrf_token }}",
           },
-          body: JSON.stringify({ price_id: priceId }),
+          body: JSON.stringify({ price_id: priceId, name }),
         })
         .then(async (res) => {
           const text = await res.text();

@@ -8,7 +8,7 @@ def subscription_required(view_func):
             return redirect('login') 
         try:
             subscription = UserSubscription.objects.get(user=request.user)
-            if not subscription.is_active or subscription.current_period_end < now():
+            if not subscription.status == 'active' or subscription.next_billing_date < now():
                 return redirect('pricing_page')
         except UserSubscription.DoesNotExist:
             return redirect('pricing_page')
