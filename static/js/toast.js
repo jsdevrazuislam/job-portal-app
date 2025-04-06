@@ -14,7 +14,7 @@ window.showToast = function(message, type = "info") {
     toast.className = `toast toast-${type} bg-white border shadow rounded px-4 py-2 flex items-center justify-between gap-4`;
     toast.innerHTML = `
         <span>${message}</span>
-        <button class="text-gray-500 hover:text-red-500" onclick="this.parentElement.remove()">×</button>
+        <button class="text-white hover:text-red-500" onclick="this.parentElement.remove()">×</button>
     `;
 
     toastContainer.appendChild(toast);

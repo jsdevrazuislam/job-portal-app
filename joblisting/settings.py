@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'django_cotton',
     'django_tailwind_cli',
     "lucide",
+    'ckeditor',
     'django_extensions',
     'django_browser_reload'
 ]
@@ -148,6 +149,7 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static/')]
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+CKEDITOR_UPLOAD_PATH = "uploads/"
 
 
 # Default primary key field type
