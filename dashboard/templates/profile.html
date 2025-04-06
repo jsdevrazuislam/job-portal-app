@@ -418,11 +418,9 @@
                         {% endif %}
                       </c-select.trigger>
                       <c-select.content>
-                        <c-select.item value="Technology & IT">Technology & IT</c-select.item>
-                        <c-select.item value="Finance & Banking">Finance & Banking</c-select.item>
-                        <c-select.item value="Healthcare">Healthcare</c-select.item>
-                        <c-select.item value="Education">Education</c-select.item>
-                        <c-select.item value="Retail & E-commerce">Retail & E-commerce</c-select.item>
+                        {% for item  in industry %}
+                        <c-select.item value="{{ item.label }}">{{ item.label }}</c-select.item>
+                        {% endfor %}
                       </c-select.content>
                     </c-select>
                   </div>
@@ -438,11 +436,11 @@
                        {% endif %}
                       </c-select.trigger>
                       <c-select.content>
-                        <c-select.item value="1-10 employees">1-10 employees</c-select.item>
-                        <c-select.item value="11-50 employees">11-50 employees</c-select.item>
-                        <c-select.item value="51-250 employees">51-250 employees</c-select.item>
-                        <c-select.item value="251-1000 employees">251-1000 employees</c-select.item>
-                        <c-select.item value="1000+ employees">1000+ employees</c-select.item>
+                        
+                        {% for item in company_size %}
+                        <c-select.item value="{{ item.label }}">{{ item.label }}</c-select.item>
+                        {% endfor %}
+                          
                       </c-select.content>
                     </c-select>
                   </div>

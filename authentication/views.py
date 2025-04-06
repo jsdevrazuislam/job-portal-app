@@ -83,6 +83,7 @@ def success_page(request):
 def user_logout(request):
     if request.method == 'POST':
         logout(request)
+        messages.success(request, "Logout Successfully")
         return JsonResponse({"message": "Logout Successfully"}, status=200)
     else:
         return JsonResponse({"message": "Invalid Request"}, status=400)

@@ -26,84 +26,104 @@
 
   <div class="container mx-auto px-4 py-12">
     <div class="bg-white rounded-lg shadow-md p-6 mb-10">
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div class="relative md:col-span-2"> 
-          {% lucide 'search' class='absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400' size=20 %}
-          <c-input placeholder="Job title, keywords, or company" class="pl-10" />
+      <form method='GET' class='w-full'>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div class="relative md:col-span-2"> 
+            {% lucide 'search' class='absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400' size=20 %}
+            <c-input name='search' placeholder="Job title, keywords, or company" class="pl-10" />
+          </div>
+          <c-select name='location'>
+            <c-select.trigger>
+              <c-select.value placeholder="Location" />
+            </c-select.trigger>
+            <c-select.content>
+              <c-select.item value="anywhere">Anywhere</c-select.item>
+              <c-select.item value="dhaka">Dhaka</c-select.item>
+              <c-select.item value="chittagong">Chittagong</c-select.item>
+              <c-select.item value="sylhet">Sylhet</c-select.item>
+              <c-select.item value="rajshahi">Rajshahi</c-select.item>
+            </c-select.content>
+          </c-select>
+          <c-button type='submit' class="w-full">Search Jobs</c-button>
         </div>
-        <c-select>
-          <c-select.trigger>
-            <c-select.value placeholder="Location" />
-          </c-select.trigger>
-          <c-select.content>
-            <c-select.item value="anywhere">Anywhere</c-select.item>
-            <c-select.item value="dhaka">Dhaka</c-select.item>
-            <c-select.item value="chittagong">Chittagong</c-select.item>
-            <c-select.item value="sylhet">Sylhet</c-select.item>
-            <c-select.item value="rajshahi">Rajshahi</c-select.item>
-          </c-select.content>
-        </c-select>
-        <c-button class="w-full">Search Jobs</c-button>
-      </div>
 
       <div class="mt-4 flex flex-wrap gap-2">
-        <c-badge variant="outline" class="cursor-pointer hover:bg-primary hover:text-primary-foreground">
-          Remote
-        </c-badge>
-        <c-badge variant="outline" class="cursor-pointer hover:bg-primary hover:text-primary-foreground">
-          Full-time
-        </c-badge>
-        <c-badge variant="outline" class="cursor-pointer hover:bg-primary hover:text-primary-foreground">
-          Part-time
-        </c-badge>
-        <c-badge variant="outline" class="cursor-pointer hover:bg-primary hover:text-primary-foreground">
-          Entry Level
-        </c-badge>
-        <c-badge variant="outline" class="cursor-pointer hover:bg-primary hover:text-primary-foreground">
-          Experienced
-        </c-badge>
-      </div>
+        <label>
+            <input type="checkbox" name="workmode" value="Remote" class="hidden peer">
+            <c-badge variant="outline" class="cursor-pointer peer-checked:bg-primary peer-checked:text-primary-foreground">
+                Remote
+            </c-badge>
+        </label>
+        <label>
+            <input type="checkbox" name="workmode" value="Full-time" class="hidden peer">
+            <c-badge variant="outline" class="cursor-pointer peer-checked:bg-primary peer-checked:text-primary-foreground">
+                Full-time
+            </c-badge>
+        </label>
+        <label>
+            <input type="checkbox" name="workmode" value="Part-time" class="hidden peer">
+            <c-badge variant="outline" class="cursor-pointer peer-checked:bg-primary peer-checked:text-primary-foreground">
+                Part-time
+            </c-badge>
+        </label>
+        <label>
+            <input type="checkbox" name="workmode" value="Entry Level" class="hidden peer">
+            <c-badge variant="outline" class="cursor-pointer peer-checked:bg-primary peer-checked:text-primary-foreground">
+                Entry Level
+            </c-badge>
+        </label>
+        <label>
+            <input type="checkbox" name="workmode" value="Experienced" class="hidden peer">
+            <c-badge variant="outline" class="cursor-pointer peer-checked:bg-primary peer-checked:text-primary-foreground">
+                Experienced
+            </c-badge>
+        </label>
+    </div>
+  </form>
+
     </div>
 
     <h2 class="text-2xl font-bold mb-6">Featured Jobs</h2>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        
+        {% for job in jobs %}
         <c-card class="overflow-hidden hover:shadow-lg transition-shadow">
           <c-card.content class="p-6">
             <div class="flex items-start gap-4">
               <div class="h-16 w-16 rounded-md overflow-hidden bg-gray-100 flex-shrink-0">
                 <img
-                  src={job.logo}
-                  alt={job.company}
-                  class="h-full w-full object-contain p-2"
+                  src="{{ job.user.company_profile.logo.url }}"
+                  alt="{{ job.user.company_profile.name  }}"
+                  class="h-full w-full object-cover"
                 />
               </div>
               <div class="flex-1">
                 <h3 class="text-xl font-semibold mb-1">
-                  <a href="" class="hover:text-primary">
-                    title
+                  <a href="{% url 'job_details' job.id %}" class="hover:text-primary">
+                    {{job.title}}
                   </a>
                 </h3>
-                <p class="text-gray-600 mb-2">company</p>
+                <p class="text-gray-600 mb-2">{{job.user.company_profile.name}}</p>
                 <div class="flex flex-wrap gap-2 mb-3">
-                  <c-badge variant="default">workMode</c-badge>
-                  <c-badge variant="outline">type</c-badge>
+                  <c-badge variant="default">{{job.workMode}}</c-badge>
+                  <c-badge variant="outline">{{job.type}}</c-badge>
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-gray-500">
                   <div class="flex items-center gap-1">
                     {% lucide 'map-pin' size=16 %}
-                    <span>location</span>
+                    <span>{{job.location}}</span>
                   </div>
                   <div class="flex items-center gap-1">
                     {% lucide 'dollar-sign' size=16 %}
-                    <span>salary</span>
+                    <span>{{job.salary}}</span>
                   </div>
                   <div class="flex items-center gap-1">
                     {% lucide 'building' size=16 %}
-                    <span>companySize</span>
+                    <span>{{job.user.company_profile.company_size}}</span>
                   </div>
                   <div class="flex items-center gap-1">
                     {% lucide 'clock' size=16 %}
-                    <span>postedAt</span>
+                    <span>{{job.created_at|timesince}} ago</span>
                   </div>
                 </div>
               </div>
@@ -111,8 +131,8 @@
           </c-card.content>
           <c-card.footer class="bg-gray-50 px-6 py-3">
             <div class="w-full flex justify-between items-center">
-              <span class="text-sm text-gray-500">postedAt</span>
-              <a href="">
+              <span class="text-sm text-gray-500"> {{job.user.first_name}} {{job.user.last_name}}</span>
+              <a href="{% url 'job_details' job.id %}">
                 <c-button variant="outline" size="sm">
                   View Details
                 </c-button>
@@ -120,6 +140,10 @@
             </div>
           </c-card.footer>
         </c-card>
+        {% empty %}
+            <p>No jobs found matching your criteria.</p>
+        {% endfor %}
+          
     </div>
 
     <div class="mt-10 text-center">

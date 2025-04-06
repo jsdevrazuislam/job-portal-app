@@ -6,10 +6,29 @@ from django.conf import settings
 from authentication.models import CustomUser, UserSubscription
 import json
 from datetime import date
-
+from jobs.models import PostJobModel
+from django.db.models import Q
 
 def home(request):
-    return render(request, 'index.html')
+    featured_jobs = PostJobModel.objects.all()
+
+    search_query = request.GET.get('search', '')
+    location = request.GET.get('location')
+
+    if location:
+        featured_jobs = featured_jobs.filter(location__icontains=location)
+
+    if search_query:
+        featured_jobs = featured_jobs.filter(
+            Q(title__icontains=search_query) | Q(user__company_name__icontains=search_query)
+        )
+
+    work_mode = request.GET.getlist('workmode', '')
+    if work_mode:
+        featured_jobs = featured_jobs.filter(type__in=work_mode)
+
+    featured_jobs = featured_jobs.order_by('-created_at')[:9]
+    return render(request, 'index.html', {"jobs": featured_jobs})
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 

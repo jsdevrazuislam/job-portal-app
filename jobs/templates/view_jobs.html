@@ -12,12 +12,13 @@
 
     <div class="w-full md:w-3/4 lg:w-4/5">
       <div class="bg-white rounded-lg shadow-sm border p-4 mb-6">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="w-full">
+         <form method='GET' class="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div class="relative">
             {% lucide 'search' class="absolute left-3 top-2 transform-translate-y-1/2 text-gray-400" size=20 %}
-            <c-input placeholder="Job title or company" class="pl-10" />
+            <c-input name='search' placeholder="Job title or company" class="pl-10" />
           </div>
-          <c-select value="{location}">
+          <c-select name="location">
             <c-select.trigger>
               <c-select.value placeholder="Location" />
             </c-select.trigger>
@@ -52,89 +53,104 @@
                 </c-sheet.content>
               </c-sheet>
           </div>
-          <c-button class="w-full">Search Jobs</c-button>
+          <c-button type='submit' class="w-full">Search Jobs</c-button>
+         </form>
         </div>
       </div>
 
       <div class="space-y-6">
-        <div class="flex justify-between items-center">
-          <p class="text-gray-600">{filteredJobs.length} jobs found</p>
-          <c-select defaultValue="newest">
-            <c-select.trigger class="w-[180px]">
-              <c-select.value placeholder="Sort by" />
-            </c-select.trigger>
-            <c-select.content>
-              <c-select.item value="newest">Newest First</c-select.item>
-              <c-select.item value="oldest">Oldest First</c-select.item>
-              <c-select.item value="salary-high">Highest Salary</c-select.item>
-              <c-select.item value="salary-low">Lowest Salary</c-select.item>
-            </c-select.content>
-          </c-select>
+        <div class="flex justify-between">
+          <p class="text-gray-600">{{jobs|length}} jobs found</p>
+          <form method="GET">
+            <!-- other filter fields -->
+          
+            <!-- Sort By -->
+            <div class="flex justify-end">
+              <c-select name="sort" class="w-40">
+                <c-select.trigger>
+                  <c-select.value placeholder="Sort by" />
+                </c-select.trigger>
+                <c-select.content>
+                  <c-select.item value="newest">Newest First</c-select.item>
+                  <c-select.item value="oldest">Oldest First</c-select.item>
+                  <c-select.item value="salary-high">Highest Salary</c-select.item>
+                  <c-select.item value="salary-low">Lowest Salary</c-select.item>
+                </c-select.content>
+              </c-select>
+            </div>
+          
+            <c-button class="w-full mt-2" type="submit">Filters</c-button>
+          </form>
+          
         </div>
 
-        {% if True %}
+        {% if jobs|length > 0 %}
         <div class="space-y-4">
+          
+          {% for job in jobs %}
           <c-card
-            class="overflow-hidden hover:shadow-md transition-shadow"
-          >
-            <c-card.content class="pt-6">
-              <div class="flex items-start gap-4">
+          class="overflow-hidden hover:shadow-md transition-shadow"
+        >
+          <c-card.content class="pt-6">
+            <div class="flex items-start gap-4">
+              <div
+                class="h-16 w-16 rounded-md overflow-hidden bg-gray-100 flex-shrink-0"
+              >
+                <img
+                  src="{{ job.user.company_profile.logo.url }}"
+                  alt="{{job.user.company_profile.name}}"
+                  class="h-full w-full object-cover"
+                />
+              </div>
+              <div class="flex-1">
+                <h3 class="text-xl font-semibold mb-1">
+                  <a href="{% url 'job_details' job.id %}" class="hover:text-primary"> {{ job.title }} </a>
+                </h3>
+                <p class="text-gray-600 mb-2">{{job.user.company_profile.name}}</p>
+                <div class="flex flex-wrap gap-2 mb-3">
+                  <c-badge variant="default">{{job.workMode}}</c-badge>
+                  <c-badge variant="outline">{{job.type}}</c-badge>
+                </div>
+                <p class="text-gray-600 text-sm mb-3 line-clamp-2">
+                  {{job.description}}
+                </p>
                 <div
-                  class="h-16 w-16 rounded-md overflow-hidden bg-gray-100 flex-shrink-0"
+                  class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-gray-500"
                 >
-                  <img
-                    src="{job.logo}"
-                    alt="{job.company}"
-                    class="h-full w-full object-contain p-2"
-                  />
-                </div>
-                <div class="flex-1">
-                  <h3 class="text-xl font-semibold mb-1">
-                    <a href="" class="hover:text-primary"> {job.title} </a>
-                  </h3>
-                  <p class="text-gray-600 mb-2">{job.company}</p>
-                  <div class="flex flex-wrap gap-2 mb-3">
-                    <c-badge variant="outline">{job.workMode}</c-badge>
-                    <c-badge variant="outline">{job.type}</c-badge>
+                  <div class="flex items-center gap-1">
+                    {% lucide 'map-pin' size=16 %}
+                    <span>{{job.location}}</span>
                   </div>
-                  <p class="text-gray-600 text-sm mb-3 line-clamp-2">
-                    {job.description}
-                  </p>
-                  <div
-                    class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-gray-500"
-                  >
-                    <div class="flex items-center gap-1">
-                      {% lucide 'map-pin' size=16 %}
-                      <span>{job.location}</span>
-                    </div>
-                    <div class="flex items-center gap-1">
-                      {% lucide 'dollar-sign' size=16 %}
-                      <span>{job.salary}</span>
-                    </div>
-                    <div class="flex items-center gap-1">
-                      {% lucide 'building' size=16 %}
-                      <span>{job.companySize}</span>
-                    </div>
-                    <div class="flex items-center gap-1">
-                      {% lucide 'clock' size=16 %}
-                      <span>{job.postedAt}</span>
-                    </div>
+                  <div class="flex items-center gap-1">
+                    {% lucide 'dollar-sign' size=16 %}
+                    <span>{{job.salary}}</span>
                   </div>
-                </div>
-                <div class="hidden md:flex flex-col items-end gap-2">
-                  <a href="{% url 'job_details' 1 %}">
-                    <c-button>View Job</c-button>
-                  </a>
-                  <p class="text-sm text-gray-500">{job.postedAt}</p>
+                  <div class="flex items-center gap-1">
+                    {% lucide 'building' size=16 %}
+                    <span>{{job.user.company_profile.company_size}}</span>
+                  </div>
+                  <div class="flex items-center gap-1">
+                    {% lucide 'clock' size=16 %}
+                    <span>{{job.created_at|timesince}} ago</span>
+                  </div>
                 </div>
               </div>
-              <div class="mt-4 flex md:hidden">
-                <a href="" class="w-full">
-                  <c-button class="w-full">View Job</c-button>
+              <div class="hidden md:flex flex-col items-end gap-2">
+                <a href="{% url 'job_details' job.id %}">
+                  <c-button>View Job</c-button>
                 </a>
+                <p class="text-sm text-gray-500">{{job.user.first_name}} {{ job.user.last_name }}</p>
               </div>
-            </c-card.content>
-          </c-card>
+            </div>
+            <div class="mt-4 flex md:hidden">
+              <a href="" class="w-full">
+                <c-button class="w-full">View Job</c-button>
+              </a>
+            </div>
+          </c-card.content>
+        </c-card>
+          {% endfor %}
+            
         </div>
         {% else %}
         <div class="bg-white rounded-lg shadow-sm border p-8 text-center">

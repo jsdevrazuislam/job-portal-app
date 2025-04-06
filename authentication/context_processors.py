@@ -67,5 +67,19 @@ def static_data(request):
             {"label": "Masters Degree"},
             {"label": "PhD"},
             {"label": "Any"},
+        ],
+        "company_size":[
+            {"label":"1-10 employees"},
+            {"label":"11-50 employees"},
+            {"label":"51-250 employees"},
+            {"label":"251-1000 employees"},
+            {"label":"1000+ employees"},
+        ],
+        "industry":[
+            {"label":"Technology & IT"},
+            {"label":"Finance & Banking"},
+            {"label":"Healthcare"},
+            {"label":"Education"},
+            {"label":"Retail & E-commerce"},
         ]
     }

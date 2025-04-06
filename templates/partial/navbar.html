@@ -228,7 +228,6 @@
     .then(data => {
         if (data.message) {
             window.location.href = "{% url 'login' %}"; 
-            showToast("Logout Success", "success")
         } else {
             showToast("Logout failed!", "error")
         }
