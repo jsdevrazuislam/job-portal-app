@@ -77,3 +77,5 @@ python manage.py migrate
 python manage.py createsuperuser
 python manage.py runserver
 ```
+
+./tailwindcss -i ./static/input.css -o ./static/output.css --watch

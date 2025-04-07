@@ -12,23 +12,23 @@
             </div>
             <div class="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
               <div class="h-24 w-24 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
-                {% lucide 'user' class="h-12 w-12 text-gray-400" %}
+                <img src="{{ user.avatar.url }}" class='w-full h-full object-cover' alt="{{ user.first_name}}">
               </div>
               <div>
-                <c-card.title class="text-2xl">Rahim Ahmed</c-card.title>
-                <c-card.description class="text-lg">Senior Frontend Developer</c-card.description>
+                <c-card.title class="text-2xl">{{ user.first_name}} {{ user.last_name }}</c-card.title>
+                <c-card.description class="text-lg">{{ user.job_seeker_profile.title }}</c-card.description>
                 <div class="flex flex-wrap gap-2 mt-2">
                   <div class="flex items-center text-sm text-gray-500">
                     {% lucide 'map-pin' size=16 class="mr-1" %}
-                    Dhaka, Bangladesh
+                    {{ user.job_seeker_profile.location }}
                   </div>
                   <div class="flex items-center text-sm text-gray-500">
                     {% lucide 'mail' size=16 class="mr-1" %}
-                    rahim@example.com
+                    {{  user.email }}
                   </div>
                   <div class="flex items-center text-sm text-gray-500">
                     {% lucide 'phone' size=16 class="mr-1" %}
-                    +880 1712 345678
+                   {{ user.job_seeker_profile.phone_number }}
                   </div>
                 </div>
               </div>
@@ -39,9 +39,7 @@
               <div>
                 <h3 class="text-lg font-semibold mb-2">About Me</h3>
                 <p class="text-gray-600">
-                  Experienced Frontend Developer with 5+ years of expertise in building responsive web applications.
-                  Proficient in React, TypeScript, and modern JavaScript frameworks. Passionate about creating
-                  intuitive user interfaces and optimizing web performance.
+                 {{ user.job_seeker_profile.about_me }}
                 </p>
               </div>
 
@@ -118,34 +116,6 @@
                     Implemented responsive designs, optimized performance, and mentored junior developers.
                   </p>
                 </div>
-
-                <div class="border rounded-lg p-4">
-                  <div class="flex justify-between">
-                    <div>
-                      <h3 class="font-semibold text-lg">Frontend Developer</h3>
-                      <p class="text-gray-600">WebSolutions Ltd</p>
-                    </div>
-                    <div class="flex gap-2">
-                      <Button variant="ghost" size="sm">
-                        Edit
-                      </Button>
-                      <Button variant="ghost" size="sm" class="text-red-500">
-                        Delete
-                      </Button>
-                    </div>
-                  </div>
-                  <div class="flex items-center text-sm text-gray-500 mt-1 mb-3">
-                    {% lucide 'calendar' size=16 class="mr-1" %}
-                    Mar 2018 - Dec 2020
-                    <span class="mx-2">•</span>
-                    {% lucide 'map-pin' size=16 class="mr-1" %}
-                    Chittagong, Bangladesh
-                  </div>
-                  <p class="text-gray-600 text-sm">
-                    Developed and maintained client websites using React, JavaScript, and CSS. Collaborated with
-                    designers to implement responsive UI components.
-                  </p>
-                </div>
               </c-card.content>
             </c-card>
           </c-tabs.content>
@@ -194,141 +164,216 @@
           </c-tabs.content>
 
           <c-tabs.content value="resume" class="mt-6">
-            <c-card>
-              <c-card.header>
-                <div class="flex justify-between items-center">
-                  <c-card.title>Resume</c-card.title>
-                  <Button>Upload New Resume</Button>
-                </div>
-              </c-card.header>
-              <c-card.content>
-                <div class="border rounded-lg p-6 flex flex-col items-center justify-center">
-                  <div class="h-16 w-16 rounded-full bg-blue-100 flex items-center justify-center mb-4">
-                    {% lucide 'file-text' size=16 class="h-8 w-8 text-blue-600" %}
+            <form method="POST" enctype="multipart/form-data"
+                  x-data="{
+                    fileName: {% if user.job_seeker_profile.resume %}'{{user.job_seeker_profile.resume.name}}'{% else %}''{% endif %},
+                    uploaded: {% if user.job_seeker_profile.resume %}true{% else %}false{% endif %},
+                    uploadedAt: '',
+                    handleFileUpload(e) {
+                      const file = e.target.files[0];
+                      if (!file) return;
+                      this.fileName = file.name;
+                      this.uploadedAt = new Date().toLocaleDateString('en-US', {
+                        year: 'numeric', month: 'long', day: 'numeric'
+                      });
+                      this.uploaded = true;
+                    },
+                    removeFile() {
+                      this.uploaded = false;
+                      this.fileName = '';
+                      this.uploadedAt = '';
+                      this.$refs.input.value = null;
+                    }
+                  }"
+            >
+            {% csrf_token %}
+            <input type="hidden" name="form_type" value="resume">
+              <c-card>
+                <c-card.header>
+                  <div class="flex justify-between items-center">
+                    <c-card.title>Resume</c-card.title>
+                    <c-button type='submit'>Upload New Resume</c-button>
                   </div>
-                  <h3 class="font-semibold text-lg mb-1">Rahim_Ahmed_Resume.pdf</h3>
-                  <p class="text-gray-500 text-sm mb-4">Uploaded on March 15, 2025</p>
-                  <div class="flex gap-3">
-                    <c-button variant="outline">Download</c-button>
-                    <c-button variant="outline" class="text-red-500">
-                      Delete
-                    </c-button>
-                  </div>
+                </c-card.header>
+          
+                <c-card.content>
+                    
+                    {% if not user.job_seeker_profile.resume %}
+                    <c-label for="logo-upload"
+                    class="border-2 border-dashed rounded-lg p-6 flex flex-col items-center justify-center cursor-pointer">
+                    {% lucide 'upload' class="h-10 w-10 text-gray-400 mb-2" %}
+                    <p class="text-sm text-gray-600 mb-1">Drag and drop your resume here or click to browse</p>
+                    <p class="text-xs text-gray-500">PDF (max. 2MB)</p>
+                    <c-input name="resume"
+                              id="logo-upload"
+                              type="file"
+                              class="hidden"
+                              accept="application/pdf"
+                              x-ref="input"
+                              @change="handleFileUpload" />
+                  </c-label>
+                    {% endif %}
+                      
+          
+                  <template x-if="uploaded">
+                    <div class="border rounded-lg mt-6 p-6 flex flex-col items-center justify-center">
+                      <div class="h-16 w-16 rounded-full bg-blue-100 flex items-center justify-center mb-4">
+                        {% lucide 'file-text' size=16 class="h-8 w-8 text-blue-600" %}
+                      </div>
+                      <h3 class="font-semibold text-lg mb-1" x-text="fileName"></h3>
+                      <p class="text-gray-500 text-sm mb-4">Uploaded on <span x-text="uploadedAt"></span></p>
+                      <div class="flex gap-3">
+                        
+                        {% if user.job_seeker_profile.resume %}
+                        <a href='{{ user.job_seeker_profile.resume.url }}' download variant="outline">
+                          <c-button variant="outline" type="button">
+                            Download
+                          </c-button>
+                        </a>
+                        {% endif %}
+                          
+                        <c-button variant="outline" class="text-red-500" type="button" @click="removeFile()">
+                          Delete
+                        </c-button>
+                      </div>
+                    </div>
+                  </template>
+                  {% if resume_form.non_field_errors %}
+                <div>
+                    {% for error in resume_form.non_field_errors %}
+                        <p class="text-red-500 font-semibold">{{ error }}</p>
+                    {% endfor %}
                 </div>
-              </c-card.content>
-            </c-card>
+                {% endif %}
+
+                </c-card.content>
+              </c-card>
+            </form>
           </c-tabs.content>
+          
 
           <c-tabs.content value="preferences" class="mt-6">
-            <c-card>
-              <c-card.header>
-                <c-card.title>Job Preferences</c-card.title>
-                <c-card.description>
-                  Set your preferences to help us find the right job matches for you
-                </c-card.description>
-              </c-card.header>
-              <c-card.content class="space-y-6">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div class="space-y-2">
-                    <c-label for="job-title">Desired Job Title</c-label>
-                    <c-input id="job-title" value="Senior Frontend Developer" />
-                  </div>
-
-                  <div class="space-y-2">
-                    <c-label for="job-type">Job Type</c-label>
-                    <c-select default_value="full-time">
-                      <c-select.trigger id="job-type">
-                        <c-select.value placeholder="Select job type" />
-                      </c-select.trigger>
-                      <c-select.content>
-                        <c-select.item value="full-time">Full-time</c-select.item>
-                        <c-select.item value="part-time">Part-time</c-select.item>
-                        <c-select.item value="contract">Contract</c-select.item>
-                        <c-select.item value="internship">Internship</c-select.item>
-                      </c-select.content>
-                    </c-select>
-                  </div>
-
-                  <div class="space-y-2">
-                    <c-label for="work-mode">Work Mode</c-label>
-                    <c-select default_value="remote">
-                      <c-select.trigger id="work-mode">
-                        <c-select.value placeholder="Select work mode" />
-                      </c-select.trigger>
-                      <c-select.content>
-                        <c-select.item value="remote">Remote</c-select.item>
-                        <c-select.item value="hybrid">Hybrid</c-select.item>
-                        <c-select.item value="on-site">On-site</c-select.item>
-                      </c-select.content>
-                    </c-select>
-                  </div>
-
-                  <div class="space-y-2">
-                    <c-label for="location">Preferred Location</c-label>
-                    <c-input id="location" value="Dhaka, Bangladesh" />
-                  </div>
-
-                  <div class="space-y-2">
-                    <c-label for="min-salary">Minimum Salary (Monthly)</c-label>
-                    <c-input id="min-salary" type="number" value="80000" />
-                  </div>
-
-                  <div class="space-y-2">
-                    <c-label for="experience">Years of Experience</c-label>
-                    <c-input id="experience" type="number" value="5" />
-                  </div>
-                </div>
-
-                <c-separator />
-
-                <div class="space-y-4">
-                  <h3 class="font-medium">Notification Preferences</h3>
-
-                  <div class="flex items-center justify-between">
-                    <div class="space-y-0.5">
-                      <c-label for="job-alerts">Job Alerts</c-label>
-                      <p class="text-sm text-gray-500">Receive notifications about new job matches</p>
+            <form method='POST'>
+              {% csrf_token %}
+              <input type="hidden" name="form_type" value="basic_info">
+              <c-card>
+                <c-card.header>
+                  <c-card.title>Job Preferences</c-card.title>
+                  <c-card.description>
+                    Set your preferences to help us find the right job matches for you
+                  </c-card.description>
+                </c-card.header>
+                <c-card.content class="space-y-6">
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-2">
+                      <c-label for="job-title">Desired Job Title</c-label>
+                      <c-input id="job-title" name='title' value="{{ user.job_seeker_profile.title|default_if_none:'' }}" />
                     </div>
-                    <c-switch 
-                      name="job-alerts" 
-                      default="true" 
-                      true_value="Yes" 
-                      false_value="No"
-                    />
-                  </div>
-
-                  <div class="flex items-center justify-between">
-                    <div class="space-y-0.5">
-                      <c-label for="application-updates">Application Updates</c-label>
-                      <p class="text-sm text-gray-500">Receive notifications about your job applications</p>
+  
+                    <div class="space-y-2">
+                      <c-label for="job-type">Job Type</c-label>
+                      <c-select name='job_type' default_value="{{ user.job_seeker_profile.job_type|default_if_none:'' }}">
+                        <c-select.trigger id="job-type">
+                          <c-select.value placeholder="Select job type" />
+                        </c-select.trigger>
+                        <c-select.content>
+                          <c-select.item value="full-time">Full-time</c-select.item>
+                          <c-select.item value="part-time">Part-time</c-select.item>
+                          <c-select.item value="contract">Contract</c-select.item>
+                          <c-select.item value="internship">Internship</c-select.item>
+                        </c-select.content>
+                      </c-select>
                     </div>
-                    <c-switch 
-                      name="application-updates" 
-                      default="true" 
-                      true_value="Yes" 
-                      false_value="No"
-                    />
-                  </div>
-
-                  <div class="flex items-center justify-between">
-                    <div class="space-y-0.5">
-                      <c-label for="profile-views">Profile Views</c-label>
-                      <p class="text-sm text-gray-500">
-                        Receive notifications when employers view your profile
-                      </p>
+  
+                    <div class="space-y-2">
+                      <c-label for="work-mode">Work Mode</c-label>
+                      <c-select name='work_mode' default_value="{{ user.job_seeker_profile.work_mode|default_if_none:'' }}">
+                        <c-select.trigger id="work-mode">
+                          <c-select.value placeholder="Select work mode" />
+                        </c-select.trigger>
+                        <c-select.content>
+                          <c-select.item value="remote">Remote</c-select.item>
+                          <c-select.item value="hybrid">Hybrid</c-select.item>
+                          <c-select.item value="on-site">On-site</c-select.item>
+                        </c-select.content>
+                      </c-select>
                     </div>
-                    <c-switch 
-                      name="profile-views" 
-                      default="true" 
-                      true_value="Yes" 
-                      false_value="No"
-                    />
+  
+                    <div class="space-y-2">
+                      <c-label for="location">Preferred Location</c-label>
+                      <c-input id="location" name='location' value="{{ user.job_seeker_profile.location|default_if_none:'' }}" />
+                    </div>
+  
+                    <div class="space-y-2">
+                      <c-label for="min-salary">Minimum Salary (Monthly)</c-label>
+                      <c-input id="min-salary" name='salary' type="number" value="{{ user.job_seeker_profile.salary|default_if_none:'' }}" />
+                    </div>
+  
+                    <div class="space-y-2">
+                      <c-label for="experience">Years of Experience</c-label>
+                      <c-input id="experience" name='years_of_experience' type="number" value="{{ user.job_seeker_profile.years_of_experience|default_if_none:'' }}" />
+                    </div>
+                    <div class="space-y-2">
+                      <c-label for="phone_number">Contract Number</c-label>
+                      <c-input id="phone_number" name='phone_number' type="text" value="{{ user.job_seeker_profile.phone_number|default_if_none:'' }}" />
+                    </div>
                   </div>
-                </div>
-              </c-card.content>
-              <c-card.footer>
-                <c-button>Save Preferences</c-button>
-              </c-card.footer>
+                  <div class="space-y-2">
+                    <c-label for="about_me">About me</c-label>
+                    <c-textarea id="about_me" name='about_me' />
+                  </div>
+  
+                  <c-separator />
+  
+                  <div class="space-y-4">
+                    <h3 class="font-medium">Notification Preferences</h3>
+  
+                    <div class="flex items-center justify-between">
+                      <div class="space-y-0.5">
+                        <c-label for="job-alerts">Job Alerts</c-label>
+                        <p class="text-sm text-gray-500">Receive notifications about new job matches</p>
+                      </div>
+                      <c-switch 
+                        name="job-alerts" 
+                        default="true" 
+                        true_value="Yes" 
+                        false_value="No"
+                      />
+                    </div>
+  
+                    <div class="flex items-center justify-between">
+                      <div class="space-y-0.5">
+                        <c-label for="application-updates">Application Updates</c-label>
+                        <p class="text-sm text-gray-500">Receive notifications about your job applications</p>
+                      </div>
+                      <c-switch 
+                        name="application-updates" 
+                        default="true" 
+                        true_value="Yes" 
+                        false_value="No"
+                      />
+                    </div>
+  
+                    <div class="flex items-center justify-between">
+                      <div class="space-y-0.5">
+                        <c-label for="profile-views">Profile Views</c-label>
+                        <p class="text-sm text-gray-500">
+                          Receive notifications when employers view your profile
+                        </p>
+                      </div>
+                      <c-switch 
+                        name="profile-views" 
+                        default="true" 
+                        true_value="Yes" 
+                        false_value="No"
+                      />
+                    </div>
+                  </div>
+                </c-card.content>
+                <c-card.footer>
+                  <c-button type='submit'>Save Preferences</c-button>
+                </c-card.footer>
+            </form>
           </c-tabs.content>
         </c-card>
         </c-tabs>
@@ -677,10 +722,15 @@
       const previewContainer = document.getElementById("logo-preview");
       const removeButton = document.getElementById("remove-logo");
       const descriptionText = `{{ user.company_profile.description|escapejs }}`;
+      const about_me = `{{ user.job_seeker_profile.about_me|escapejs }}`;
       const descriptionField = document.getElementById("company-description");
+      const aboutMeField = document.getElementById("about_me");
 
       if (descriptionField) {
         descriptionField.value = descriptionText;
+      }
+      if (aboutMeField) {
+        aboutMeField.value = about_me;
       }
     
       if (deleteBtn) {

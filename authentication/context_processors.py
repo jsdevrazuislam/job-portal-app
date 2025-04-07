@@ -36,6 +36,12 @@ def static_data(request):
             { "name": "Profile", "href": "/dashboard/profile/", "icon": "user" },
             { "name": "Settings", "href": "/dashboard/settings/", "icon": "settings" },
         ],
+        "dashboard_navigation_job_seeker": [
+            { "name": "Dashboard", "href": "/dashboard/", "icon": "layout-dashboard" },
+            { "name": "Saved Jobs", "href": "/dashboard/saved/", "icon": "bookmark-check" },
+            { "name": "Profile", "href": "/dashboard/profile/", "icon": "user" },
+            { "name": "Settings", "href": "/dashboard/settings/", "icon": "settings" },
+        ],
         "job_types":[
             {
                 "label":"Full-time"

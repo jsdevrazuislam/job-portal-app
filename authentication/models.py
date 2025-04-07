@@ -2,6 +2,7 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, Permis
 from django.db import models
 from django.db import models
 from django.contrib.auth import get_user_model
+from jobs.models import PostJobModel
 
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, first_name, last_name, avatar=None, company_name="", password=None, **extra_fields):
@@ -87,3 +88,44 @@ class CompanyProfile(models.Model):
 
     def __str__(self):
         return self.name
+
+class Skill(models.Model):
+    name = models.CharField(max_length=50, unique=True)
+
+    def __str__(self):
+        return self.name
+
+class Profession(models.Model):
+    title = models.CharField(max_length=255)
+    name = models.CharField(max_length=100)
+    from_date = models.CharField(max_length=100)
+    to_date = models.CharField(max_length=100)
+    gpa = models.CharField(max_length=100)
+    location = models.CharField(max_length=100)
+    description = models.CharField(max_length=500)
+
+    def __str__(self):
+        return f"{self.name} - {self.title}"
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='job_seeker_profile')
+    title = models.CharField(max_length=100, null=True, blank=True)
+    location = models.CharField(max_length=255, null=True, blank=True)
+    phone_number = models.CharField(max_length=15, null=True, blank=True)
+    about_me = models.TextField(null=True, blank=True, max_length=300)
+    skills = models.ManyToManyField(Skill, blank=True)
+    experiences = models.ManyToManyField(Profession, blank=True, related_name='experiences')
+    educations = models.ManyToManyField(Profession, blank=True, related_name='educations')
+    resume = models.FileField(upload_to='resumes/', blank=True, null=True)
+    job_type = models.CharField(blank=True, null=True, max_length=30)
+    work_mode = models.CharField(blank=True, null=True, max_length=30)
+    years_of_experience = models.PositiveIntegerField(blank=True, null=True)
+    salary = models.PositiveIntegerField(blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.user.first_name} { self.user.last_name} - {self.title}"
+
+class JobApplication(models.Model):
+    job = models.ForeignKey(PostJobModel, on_delete=models.CASCADE, related_name='applications')
+    applicant = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    applied_at = models.DateTimeField(auto_now_add=True)

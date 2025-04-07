@@ -1,0 +1,188 @@
+<div x-data="{
+    selectedApplication: {
+      jobTitle: 'Frontend Developer'
+    }
+  }" class="flex-1 p-8">
+  <h1 class="text-3xl font-bold mb-6">Applications</h1>
+
+  <div class="mb-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+    <div class="relative">
+      {% lucide 'search' class="absolute left-3 top-2 transform-translate-y-1/2 text-gray-400" size=20 %}
+      <c-input placeholder="Search applicants..." class="pl-10" />
+    </div>
+
+    <c-select>
+      <c-select.trigger>
+        <c-select.value placeholder="Filter by job" />
+      </c-select.trigger>
+      <c-select.content>
+        <c-select.item value="all">All Jobs</c-select.item>
+      </c-select.content>
+    </c-select>
+
+    <c-select>
+      <c-select.trigger>
+        <c-select.value placeholder="Filter by status" />
+      </c-select.trigger>
+      <c-select.content>
+        <c-select.item value="all">All Statuses</c-select.item>
+        <c-select.item value="pending">Pending</c-select.item>
+        <c-select.item value="reviewed">Reviewed</c-select.item>
+        <c-select.item value="interviewed">Interviewed</c-select.item>
+        <c-select.item value="rejected">Rejected</c-select.item>
+      </c-select.content>
+    </c-select>
+  </div>
+
+  <c-card>
+    <c-card.content class="p-6">
+      {% if True %}
+      <c-table>
+        <c-table.header>
+          <c-table.row>
+            <c-table.head>Applicant</c-table.head>
+            <c-table.head>Job Title</c-table.head>
+            <c-table.head>Applied</c-table.head>
+            <c-table.head>Status</c-table.head>
+            <c-table.head class="text-right">Actions</c-table.head>
+          </c-table.row>
+        </c-table.header>
+        <c-table.body>
+          <c-table.row>
+            <c-table.cell>
+              <div class="font-medium">{application.applicant}</div>
+              <div class="text-sm text-gray-500">{application.email}</div>
+            </c-table.cell>
+            <c-table.cell>{application.jobTitle}</c-table.cell>
+            <c-table.cell>{application.appliedAt}</c-table.cell>
+            <c-table.cell>
+              <c-badge
+                variant="{% if application.status == 'pending' %}outline{% elif application.status == 'reviewed' %}secondary{% elif application.status == 'interviewed' %}default{% else %}destructive{% endif %}"
+              >
+                {application.status}
+              </c-badge>
+            </c-table.cell>
+            <c-table.cell class="text-right">
+              <div class="flex justify-end gap-2">
+                <c-button @click="$dispatch('show-dialog')" variant="outline" size="sm"> View Details </c-button>
+              </div>
+            </c-table.cell>
+          </c-table.row>
+        </c-table.body>
+      </c-table>
+      {% else %}
+      <div class="text-center py-12">
+        {% lucide 'file-text' class="h-12 w-12 text-gray-400 mx-auto mb-4" %}
+        <h3 class="text-lg font-semibold mb-2">No applications found</h3>
+        <p class="text-gray-500 mb-4">
+          You haven't received any applications yet
+        </p>
+      </div>
+      {% endif %}
+    </c-card.content>
+  </c-card>
+
+      <c-dialog>
+        <c-dialog.content class="max-w-3xl">
+          <c-dialog.header>
+            <c-dialog.title>Application Details</c-dialog.title>
+            <c-dialog.description
+              >Review application for
+              {selectedApplication.jobTitle}</c-dialog.description
+            >
+          </c-dialog.header>
+    
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 py-4">
+            <div>
+              <h3 class="font-semibold text-lg mb-4">Applicant Information</h3>
+              <div class="space-y-3">
+                <div>
+                  <p class="text-sm font-medium text-gray-500">Name</p>
+                  <p>{selectedApplication.applicant}</p>
+                </div>
+                <div>
+                  <p class="text-sm font-medium text-gray-500">Email</p>
+                  <p>{selectedApplication.email}</p>
+                </div>
+                <div>
+                  <p class="text-sm font-medium text-gray-500">Applied</p>
+                  <p>{selectedApplication.appliedAt}</p>
+                </div>
+                <div>
+                  <p class="text-sm font-medium text-gray-500">Experience</p>
+                  <p>{selectedApplication.experience}</p>
+                </div>
+                <div>
+                  <p class="text-sm font-medium text-gray-500">Skills</p>
+                  <div class="flex flex-wrap gap-2 mt-1">
+                    <c-badge variant="secondary"> react </c-badge>
+                  </div>
+                </div>
+              </div>
+            </div>
+    
+            <div>
+              <h3 class="font-semibold text-lg mb-4">Application Status</h3>
+              <div class="space-y-4">
+                <div>
+                  <p class="text-sm font-medium text-gray-500">Current Status</p>
+                  <c-badge
+                    variant="{% if application.status == 'pending' %}outline{% elif application.status == 'reviewed' %}secondary{% elif application.status == 'interviewed' %}default{% else %}destructive{% endif %}"
+                  >
+                    {application.status}
+                  </c-badge>
+                </div>
+    
+                <div>
+                  <p class="text-sm font-medium text-gray-500 mb-2">
+                    Update Status
+                  </p>
+                  <div class="flex flex-wrap gap-2">
+                    <c-button
+                      variant="outline"
+                      size="sm"
+                      class="flex items-center gap-1"
+                    >
+                      {% lucide 'circle-check' class="h-4 w-4" %} Mark as Reviewed
+                    </c-button>
+                    <c-button
+                      variant="outline"
+                      size="sm"
+                      class="flex items-center gap-1"
+                    >
+                      {% lucide 'circle-check' class="h-4 w-4" %} Mark as
+                      Interviewed
+                    </c-button>
+                    <c-button
+                      variant="outline"
+                      size="sm"
+                      class="flex items-center gap-1 text-red-500"
+                    >
+                      {% lucide 'message-circle-x' class="h-4 w-4" %} Reject
+                    </c-button>
+                  </div>
+                </div>
+    
+                <div class="pt-4 border-t">
+                  <c-button
+                    variant="outline"
+                    class="w-full flex items-center justify-center gap-2"
+                  >
+                    {% lucide 'download' class="h-4 w-4" %} Download Resume
+                  </c-button>
+                </div>
+    
+                <div class="pt-4">
+                  <c-button class="w-full flex items-center justify-center gap-2">
+                    {% lucide 'message-square' class="h-4 w-4" %} Contact Applicant
+                  </c-button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <c-dialog.footer>
+            <c-button @click="$dispatch('hide-dialog')" variant="outline"> Close </c-button>
+          </c-dialog.footer>
+        </c-dialog.content>
+      </c-dialog>
+</div>

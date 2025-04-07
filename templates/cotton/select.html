@@ -1,9 +1,9 @@
-<c-vars name=""></c-vars>
+<c-vars name="" default_value=""></c-vars>
 
 <div
   x-data="{
     open: false,
-    value: '',
+    value: '{{ default_value }}',
     displayText: '',
 
     toggle() {

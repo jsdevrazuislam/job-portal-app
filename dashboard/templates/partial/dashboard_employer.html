@@ -1,0 +1,129 @@
+<div class="px-8">
+    <h1 class='text-3xl font-bold text-gray-900 mb-4'>Dashboard</h1>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <c-card>
+          <c-card.content class="p-6">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-sm font-medium text-gray-500">Active Jobs</p>
+                <p class="text-3xl font-bold">
+                    {{ total_active_jobs }}
+                </p>
+              </div>
+              <div class="h-12 w-12 bg-primary/10 rounded-full flex items-center justify-center">
+                {%  lucide 'file-text' class="h-6 w-6 text-primary"  %}
+              </div>
+            </div>
+          </c-card.content>
+        </c-card>
+
+        <c-card>
+          <c-card.content class="p-6">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-sm font-medium text-gray-500">Total Applications</p>
+                <p class="text-3xl font-bold">
+                    {{ total_applications }}
+                </p>
+              </div>
+              <div class="h-12 w-12 bg-blue-100 rounded-full flex items-center justify-center">
+                {%  lucide 'briefcase' class="h-6 w-6 text-primary"  %}
+              </div>
+            </div>
+          </c-card.content>
+        </c-card>
+
+        <c-card>
+          <c-card.content class="p-6">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-sm font-medium text-gray-500">Total Views</p>
+                <p class="text-3xl font-bold">
+                    {{ total_views }}
+                </p>
+              </div>
+              <div class="h-12 w-12 bg-blue-100 rounded-full flex items-center justify-center">
+                {%  lucide 'chart-bar' class="h-6 w-6 text-primary"  %}
+              </div>
+            </div>
+          </c-card.content>
+        </c-card>
+    </div>
+
+    <div class="flex justify-between items-center mb-4">
+      <h1 class='text-2xl font-bold text-gray-600'>Your Job Listings</h1>
+      <a href="{% url 'post_job' %}">
+        <c-button>
+            {% lucide 'plus' size=16 %}
+            Post New Job
+        </c-button>
+      </a>
+    </div>
+    <c-card>
+        <c-card.content>
+          <c-table>
+            <c-table.header>
+              <c-table.row>
+                <c-table.head >Job Title</c-table.head>
+                <c-table.head >Location</c-table.head>
+                <c-table.head >Type</c-table.head>
+                <c-table.head >Posted</c-table.head>
+                <c-table.head >Status</c-table.head>
+                <c-table.head >Applications</c-table.head>
+                <c-table.head >Views</c-table.head>
+                <c-table.head  class="text-right">Actions</c-table.head>
+              </c-table.row>
+            </c-table.header>
+            <c-table.body>
+                
+                {% for application in jobs %}
+                <c-table.row>
+                    <c-table.cell class="font-medium">{{application.title}}</c-table.cell>
+                    <c-table.cell>{{ application.location }}</c-table.cell>
+                    <c-table.cell>{{application.type}}</c-table.cell>
+                    <c-table.cell>{{application.created_at|timesince}} ago </c-table.cell>
+                    <c-table.cell>
+                      <c-badge
+                        variant="{% if application.status == 'active' %}default{% else %}outline{% endif %}"
+                        >
+                        {{application.status}}
+                      </c-badge>
+                    </c-table.cell>
+                    <c-table.cell>{{application.application_count}}</c-table.cell>
+                    <c-table.cell>{{application.views}}</c-table.cell>
+                    <c-table.cell class="text-right">
+                    <a href="{% url 'job_details' application.id %}">
+                        <c-button
+                        variant="outline"
+                        size="icon">
+                        {% lucide 'eye' class="h-4 w-4"  %}
+                        <span class="sr-only">View</span>
+                      </c-button>
+                    </a>
+                    <a href="">
+                        <c-button
+                        variant="outline"
+                        size="icon">
+                        {% lucide 'pencil' class="h-4 w-4"  %}
+                        <span class="sr-only">View</span>
+                      </c-button>
+                    </a>
+                    <a href="">
+                        <c-button
+                        variant="outline"
+                        size="icon">
+                        {% lucide 'trash-2' class="h-4 w-4"  %}
+                        <span class="sr-only">View</span>
+                      </c-button>
+                    </a>
+                    </c-table.cell>
+                  </c-table.row>
+                {% endfor %}
+                    
+               
+            </c-table.body>
+          </c-table>
+        </c-card.content>
+      </c-card>
+</div>
